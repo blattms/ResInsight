@@ -19,13 +19,13 @@
 
 #include "RiuProjectPropertyView.h"
 
-#include "RiuMainWindow.h"
 #include "RiuTreeViewEventFilter.h"
 
 #include "cafPdmUiPropertyView.h"
 #include "cafPdmUiTreeView.h"
 
 #include <QLabel>
+#include <QMainWindow>
 #include <QSplitter>
 #include <QTreeView>
 #include <QVBoxLayout>
@@ -33,7 +33,7 @@
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RiuProjectAndPropertyView::RiuProjectAndPropertyView(QWidget* parent, Qt::WindowFlags f)
+RiuProjectAndPropertyView::RiuProjectAndPropertyView(QMainWindow* mainWindow, QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     // Tree View
@@ -53,7 +53,7 @@ RiuProjectAndPropertyView::RiuProjectAndPropertyView(QWidget* parent, Qt::Window
     m_projectTreeView->treeView()->setDragDropMode(QAbstractItemView::DragDrop);
 
     m_projectTreeView->treeView()->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_projectTreeView->treeView(), SIGNAL(customContextMenuRequested(const QPoint&)), RiuMainWindow::instance(), SLOT(customMenuRequested(const QPoint&)));
+    connect(m_projectTreeView->treeView(), SIGNAL(customContextMenuRequested(const QPoint&)), mainWindow, SLOT(customMenuRequested(const QPoint&)));
 
     // Property view
     m_propertyView = new caf::PdmUiPropertyView;

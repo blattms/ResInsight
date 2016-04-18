@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+class QMainWindow;
+
 namespace caf {
     class PdmUiItem;
     class PdmUiTreeView;
@@ -33,7 +35,7 @@ namespace caf {
 class RiuProjectAndPropertyView : public QWidget
 {
 public:
-    RiuProjectAndPropertyView(QWidget* parent = 0, Qt::WindowFlags f = 0);
+    RiuProjectAndPropertyView(QMainWindow* mainWindow, QWidget* parent = 0, Qt::WindowFlags f = 0);
 
     void setPdmItem(caf::PdmUiItem* object);
     void showProperties(caf::PdmObjectHandle* object);

@@ -615,7 +615,7 @@ void RiuMainWindow::createDockPanels()
         QDockWidget* dockWidget = new QDockWidget("Plots", this);
         dockWidget->setObjectName("dockWidget");
 
-        RiuProjectAndPropertyView* projPropView = new RiuProjectAndPropertyView(dockWidget);
+        RiuProjectAndPropertyView* projPropView = new RiuProjectAndPropertyView(this, dockWidget);
         dockWidget->setWidget(projPropView);
         projPropView->setPdmItem(m_pdmRoot);
         projPropView->setUiConfigurationName("PlotsTreeView");
@@ -1765,7 +1765,7 @@ void RiuMainWindow::slotNewObjectPropertyView()
     dockWidget->setObjectName("dockWidget");
     dockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    RiuProjectAndPropertyView* projPropView = new RiuProjectAndPropertyView(dockWidget);
+    RiuProjectAndPropertyView* projPropView = new RiuProjectAndPropertyView(this, dockWidget);
     dockWidget->setWidget(projPropView);
     projPropView->setPdmItem(m_pdmRoot);
 
