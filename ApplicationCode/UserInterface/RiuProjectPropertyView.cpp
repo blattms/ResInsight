@@ -103,3 +103,11 @@ void RiuProjectAndPropertyView::showProperties(caf::PdmObjectHandle* object)
 {
     m_propertyView->showProperties(object);
 }
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RiuProjectAndPropertyView::setUiConfigurationName(const QString& uiConfigName)
+{
+    m_projectTreeView->setUiConfigurationName(uiConfigName);
+}

@@ -610,6 +610,21 @@ void RiuMainWindow::createDockPanels()
         m_projectTreeView->treeView()->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(m_projectTreeView->treeView(), SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(customMenuRequested(const QPoint&)));
     }
+
+    {
+        QDockWidget* dockWidget = new QDockWidget("Plots", this);
+        dockWidget->setObjectName("dockWidget");
+
+        RiuProjectAndPropertyView* projPropView = new RiuProjectAndPropertyView(dockWidget);
+        dockWidget->setWidget(projPropView);
+        projPropView->setPdmItem(m_pdmRoot);
+        projPropView->setUiConfigurationName("PlotsTreeView");
+
+        addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+
+        additionalProjectViews.push_back(dockWidget);
+    }
+
     
 /*
     {

@@ -34,6 +34,7 @@
 #include "RimEclipseCaseCollection.h"
 #include "RimGeoMechCase.h"
 #include "RimGeoMechModels.h"
+#include "RimGraphPlotCollection.h"
 #include "RimIdenticalGridCaseGroup.h"
 #include "RimMainPlotCollection.h"
 #include "RimOilField.h"
@@ -88,6 +89,9 @@ RimProject::RimProject(void)
     CAF_PDM_InitFieldNoDefault(&mainPlotCollection, "MainPlotCollection", "Plots", "", "", "");
     mainPlotCollection.uiCapability()->setUiHidden(true);
 
+    CAF_PDM_InitFieldNoDefault(&graphPlotCollection, "GraphPlotCollection", "Graph Plots", "", "", "");
+    //graphPlotCollection.uiCapability()->setUiHidden(true);
+
     CAF_PDM_InitFieldNoDefault(&viewLinkerCollection, "LinkedViews", "Linked Views (field in RimProject", ":/chain.png", "", "");
     viewLinkerCollection.uiCapability()->setUiHidden(true);
     viewLinkerCollection = new RimViewLinkerCollection;
@@ -114,6 +118,7 @@ RimProject::RimProject(void)
     scriptCollection->uiCapability()->setUiIcon(QIcon(":/Default.png"));
 
     mainPlotCollection = new RimMainPlotCollection();
+    graphPlotCollection = new RimGraphPlotCollection;
 
     // For now, create a default first oilfield that contains the rest of the project
     oilFields.push_back(new RimOilField);
@@ -708,6 +713,14 @@ void RimProject::appendScriptItems(QMenu* menu, RimScriptCollection* scriptColle
 //--------------------------------------------------------------------------------------------------
 void RimProject::defineUiTreeOrdering(caf::PdmUiTreeOrdering& uiTreeOrdering, QString uiConfigName /*= ""*/)
 {
+    if (uiConfigName == "PlotsTreeView")
+    {
+        uiTreeOrdering.add(graphPlotCollection);;
+        uiTreeOrdering.setForgetRemainingFields(true);
+
+        return;
+    }
+
     if (viewLinkerCollection()->viewLinker())
     {
         // Use object instead of field to avoid duplicate entries in the tree view

@@ -32,13 +32,14 @@ class RigMainGrid;
 class RimCase;
 class RimCommandObject;
 class RimEclipseCase;
+class RimGraphPlotCollection;
 class RimIdenticalGridCaseGroup;
-class RimViewLinker;
-class RimViewLinkerCollection;
 class RimMainPlotCollection;
 class RimOilField;
 class RimScriptCollection;
 class RimView;
+class RimViewLinker;
+class RimViewLinkerCollection;
 class RimWellPathImport;
 
 namespace caf
@@ -67,6 +68,7 @@ public:
     caf::PdmChildField<RimWellPathImport*>              wellPathImport;
     caf::PdmChildField<RimMainPlotCollection*>          mainPlotCollection;
     caf::PdmChildField<RimViewLinkerCollection*>        viewLinkerCollection;
+    caf::PdmChildField<RimGraphPlotCollection*>         graphPlotCollection;
     caf::PdmChildArrayField<RimCommandObject*>          commandObjects;
     caf::PdmField<QString>                              treeViewState;
     caf::PdmField<QString>                              currentModelIndexPath;

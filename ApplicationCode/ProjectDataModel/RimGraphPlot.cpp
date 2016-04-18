@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (C) 2015-     Statoil ASA
-//  Copyright (C) 2015-     Ceetron Solutions AS
+//  Copyright (C) 2016  Statoil ASA
 // 
 //  ResInsight is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,30 +16,24 @@
 //
 /////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "RimGraphPlot.h"
 
 
-#include <QWidget>
+CAF_PDM_SOURCE_INIT(RimGraphPlot, "GraphPlot");
 
-namespace caf {
-    class PdmUiItem;
-    class PdmUiTreeView;
-    class PdmUiPropertyView;
-    class PdmObjectHandle;
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+RimGraphPlot::RimGraphPlot()
+{
+    CAF_PDM_InitObject("Graph Plot", "", "", "");
+
 }
 
 //--------------------------------------------------------------------------------------------------
-class RiuProjectAndPropertyView : public QWidget
+/// 
+//--------------------------------------------------------------------------------------------------
+RimGraphPlot::~RimGraphPlot()
 {
-public:
-    RiuProjectAndPropertyView(QWidget* parent = 0, Qt::WindowFlags f = 0);
 
-    void setPdmItem(caf::PdmUiItem* object);
-    void showProperties(caf::PdmObjectHandle* object);
-
-    void setUiConfigurationName(const QString& uiConfigName);
-
-private:
-    caf::PdmUiTreeView*     m_projectTreeView;
-    caf::PdmUiPropertyView* m_propertyView;
-};
+}
