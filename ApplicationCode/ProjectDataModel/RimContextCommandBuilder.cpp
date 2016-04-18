@@ -39,6 +39,7 @@
 #include "RimGeoMechPropertyFilter.h"
 #include "RimGeoMechPropertyFilterCollection.h"
 #include "RimGeoMechView.h"
+#include "RimGraphPlotCollection.h"
 #include "RimIdenticalGridCaseGroup.h"
 #include "RimScriptCollection.h"
 #include "RimViewController.h"
@@ -275,6 +276,10 @@ QStringList RimContextCommandBuilder::commandsFromSelection()
         else if (dynamic_cast<RimEclipseWell*>(uiItem))
         {
             commandIds << "RicNewSimWellCrossSectionFeature";
+        }
+        else if (dynamic_cast<RimGraphPlotCollection*>(uiItem))
+        {
+            commandIds << "RicCreateGraphPlotMainWindowFeature";
         }
 
         if (dynamic_cast<RimView*>(uiItem))
