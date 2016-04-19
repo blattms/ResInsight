@@ -7,10 +7,12 @@ endif()
 
 set (SOURCE_GROUP_HEADER_FILES
 ${CEE_CURRENT_LIST_DIR}RicCreateGraphPlotMainWindowFeature.h
+${CEE_CURRENT_LIST_DIR}RicDropEnabledMainWindow.h
 )
 
 set (SOURCE_GROUP_SOURCE_FILES
 ${CEE_CURRENT_LIST_DIR}RicCreateGraphPlotMainWindowFeature.cpp
+${CEE_CURRENT_LIST_DIR}RicDropEnabledMainWindow.cpp
 )
 
 list(APPEND CODE_HEADER_FILES
@@ -20,5 +22,10 @@ ${SOURCE_GROUP_HEADER_FILES}
 list(APPEND CODE_SOURCE_FILES
 ${SOURCE_GROUP_SOURCE_FILES}
 )
+
+list(APPEND QT_MOC_HEADERS
+${CEE_CURRENT_LIST_DIR}RicDropEnabledMainWindow.h
+)
+
 
 source_group( "CommandFeature\\GraphPlots" FILES ${SOURCE_GROUP_HEADER_FILES} ${SOURCE_GROUP_SOURCE_FILES} ${CEE_CURRENT_LIST_DIR}CMakeLists_files.cmake )

@@ -18,31 +18,31 @@
 
 #pragma once
 
-#include "cafCmdFeature.h"
-#include "cafCmdExecuteCommand.h"
-#include "cafPdmPointer.h"
+#include <QMainWindow>
 
-
-class RiuResultQwtPlot;
-class QDockWidget;
-class RicDropEnabledMainWindow;
 
 //==================================================================================================
 /// 
 //==================================================================================================
-class RicCreateGraphPlotMainWindowFeature : public caf::CmdFeature
+class RicDropEnabledMainWindow : public QMainWindow
 {
-    CAF_CMD_HEADER_INIT;
+    Q_OBJECT
+
+public:
+    explicit RicDropEnabledMainWindow(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    ~RicDropEnabledMainWindow();
+
+    static void handleDockWidgetDrop();
+
+public slots:
+    void dragStarted(bool);
+    void dragEnded();
 
 protected:
-    // Overrides
-    virtual bool isCommandEnabled();
-    virtual void onActionTriggered( bool isChecked );
-    virtual void setupActionLook( QAction* actionToSetup );
+    virtual void enterEvent(QEvent* event);
 
 private:
-    RiuResultQwtPlot*   createPlotWidget(QWidget* parent);
-    QDockWidget*        createDockWidget(RicDropEnabledMainWindow* mainWindow, Qt::DockWidgetArea area, const QString& name);
+    static QDockWidget* dw;
 };
 
 
