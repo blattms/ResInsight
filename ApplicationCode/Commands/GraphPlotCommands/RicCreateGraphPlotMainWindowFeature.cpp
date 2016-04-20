@@ -31,6 +31,9 @@
 #include "cvfColor3.h"
 #include "RicDropEnabledMainWindow.h"
 #include "QApplication"
+#include "RimProject.h"
+#include "RiaApplication.h"
+#include "RimGraphPlotCollection.h"
 
 CAF_CMD_SOURCE_INIT(RicCreateGraphPlotMainWindowFeature, "RicCreateGraphPlotMainWindowFeature");
 
@@ -47,74 +50,12 @@ bool RicCreateGraphPlotMainWindowFeature::isCommandEnabled()
 //--------------------------------------------------------------------------------------------------
 void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
 {
-    RicDropEnabledMainWindow* mainWindow = new RicDropEnabledMainWindow;
-
-    mainWindow->setDockNestingEnabled(true);
-    mainWindow->showNormal();
-
-    int plotId = 0;
-
-    for (size_t i = 0; i < 5; i++)
+    RimProject* proj = RiaApplication::instance()->project();
+    if (proj)
     {
-        createDockWidget(mainWindow, Qt::LeftDockWidgetArea, QString("Plot %1").arg(plotId++));
+        RimGraphPlotCollection* graphPlotCollection = proj->graphPlotCollection();
+        graphPlotCollection->showPlotWindow();
     }
-
-    for (size_t i = 0; i < 5; i++)
-    {
-        createDockWidget(mainWindow, Qt::RightDockWidgetArea, QString("Plot %1").arg(plotId++));
-    }
-
-/*
-    {
-        QDockWidget* dockWidget = new QDockWidget("Plots", mainWindow);
-        dockWidget->setObjectName("dockWidget");
-
-        mainWindow->addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
-    }
-
-    {
-        QDockWidget* dockWidget = new QDockWidget("Plots Test", mainWindow);
-        dockWidget->setObjectName("dockWidget");
-
-        mainWindow->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-    }
-
-    {
-        QDockWidget* dockWidget = new QDockWidget("Plots Test 1", mainWindow);
-        dockWidget->setObjectName("dockWidget");
-
-        mainWindow->addDockWidget(Qt::TopDockWidgetArea, dockWidget);
-    }
-
-    {
-        QDockWidget* dockWidget = new QDockWidget("Plots Test 2", mainWindow);
-        dockWidget->setObjectName("dockWidget");
-
-        mainWindow->addDockWidget(Qt::AllDockWidgetAreas, dockWidget);
-    }
-
-    {
-        QDockWidget* dockWidget = new QDockWidget("Plots Test 3", mainWindow);
-        dockWidget->setObjectName("dockWidget");
-
-        mainWindow->addDockWidget(Qt::AllDockWidgetAreas, dockWidget);
-    }
-*/
-
-
-/*
-    std::vector<caf::PdmObjectHandle*> collection;
-    caf::SelectionManager::instance()->objectsByType(&collection);
-    CVF_ASSERT(collection.size() == 1);
-
-    RimCrossSectionCollection* crossSectionCollection = NULL;
-    collection[0]->firstAnchestorOrThisOfType(crossSectionCollection);
-
-    CVF_ASSERT(crossSectionCollection);
-
-    RicAppendCrossSectionFeatureCmd* cmd = new RicAppendCrossSectionFeatureCmd(crossSectionCollection);
-    caf::CmdExecCommandManager::instance()->processExecuteCommand(cmd);
-*/
 }
 
 //--------------------------------------------------------------------------------------------------

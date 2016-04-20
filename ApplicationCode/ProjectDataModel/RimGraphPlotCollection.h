@@ -23,6 +23,7 @@
 #include "cafPdmChildArrayField.h"
 
 class RimGraphPlot;
+class RicDropEnabledMainWindow;
 
 //==================================================================================================
 ///  
@@ -35,5 +36,10 @@ public:
     RimGraphPlotCollection();
     virtual ~RimGraphPlotCollection();
 
+    void showPlotWindow();
+
     caf::PdmChildArrayField<RimGraphPlot*> graphPlots;
+
+private:
+    RicDropEnabledMainWindow* m_plotMainWindow;
 };

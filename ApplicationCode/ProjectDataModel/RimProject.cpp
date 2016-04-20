@@ -89,7 +89,7 @@ RimProject::RimProject(void)
     CAF_PDM_InitFieldNoDefault(&mainPlotCollection, "MainPlotCollection", "Plots", "", "", "");
     mainPlotCollection.uiCapability()->setUiHidden(true);
 
-    CAF_PDM_InitFieldNoDefault(&graphPlotCollection, "GraphPlotCollection", "Graph Plots", "", "", "");
+    CAF_PDM_InitFieldNoDefault(&m_graphPlotCollection, "GraphPlotCollection", "Graph Plots", "", "", "");
     //graphPlotCollection.uiCapability()->setUiHidden(true);
 
     CAF_PDM_InitFieldNoDefault(&viewLinkerCollection, "LinkedViews", "Linked Views (field in RimProject", ":/chain.png", "", "");
@@ -118,7 +118,6 @@ RimProject::RimProject(void)
     scriptCollection->uiCapability()->setUiIcon(QIcon(":/Default.png"));
 
     mainPlotCollection = new RimMainPlotCollection();
-    graphPlotCollection = new RimGraphPlotCollection;
 
     // For now, create a default first oilfield that contains the rest of the project
     oilFields.push_back(new RimOilField);
@@ -148,6 +147,8 @@ void RimProject::close()
     {
          mainPlotCollection()->wellLogPlotCollection()->wellLogPlots.deleteAllChildObjects();
     }
+
+    if (m_graphPlotCollection) delete m_graphPlotCollection;
 
     oilFields.deleteAllChildObjects();
     oilFields.push_back(new RimOilField);
@@ -715,7 +716,10 @@ void RimProject::defineUiTreeOrdering(caf::PdmUiTreeOrdering& uiTreeOrdering, QS
 {
     if (uiConfigName == "PlotsTreeView")
     {
-        uiTreeOrdering.add(graphPlotCollection);;
+        if (m_graphPlotCollection)
+        {
+            uiTreeOrdering.add(m_graphPlotCollection);
+        }
         uiTreeOrdering.setForgetRemainingFields(true);
 
         return;
@@ -746,5 +750,18 @@ void RimProject::defineUiTreeOrdering(caf::PdmUiTreeOrdering& uiTreeOrdering, QS
     uiTreeOrdering.add(scriptCollection());
     
     uiTreeOrdering.setForgetRemainingFields(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+RimGraphPlotCollection* RimProject::graphPlotCollection()
+{
+    if (!m_graphPlotCollection)
+    {
+        m_graphPlotCollection = new RimGraphPlotCollection;
+    }
+
+    return m_graphPlotCollection;
 }
 

@@ -19,6 +19,7 @@
 #include "RimGraphPlotCollection.h"
 
 #include "RimGraphPlot.h"
+#include "GraphPlotCommands/RicDropEnabledMainWindow.h"
 
 
 CAF_PDM_SOURCE_INIT(RimGraphPlotCollection, "RimGraphPlotCollection");
@@ -33,9 +34,7 @@ RimGraphPlotCollection::RimGraphPlotCollection()
     CAF_PDM_InitFieldNoDefault(&graphPlots, "GraphPlots", "",  "", "", "");
     graphPlots.uiCapability()->setUiHidden(true);
 
-    graphPlots.push_back(new RimGraphPlot);
-    graphPlots.push_back(new RimGraphPlot);
-    graphPlots.push_back(new RimGraphPlot);
+    m_plotMainWindow = NULL;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -44,4 +43,22 @@ RimGraphPlotCollection::RimGraphPlotCollection()
 RimGraphPlotCollection::~RimGraphPlotCollection()
 {
     graphPlots.deleteAllChildObjects();
+
+    m_plotMainWindow->close();
+    m_plotMainWindow->deleteLater();
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimGraphPlotCollection::showPlotWindow()
+{
+    if (!m_plotMainWindow)
+    {
+        m_plotMainWindow = new RicDropEnabledMainWindow;
+        m_plotMainWindow->setDockNestingEnabled(true);
+    }
+
+    m_plotMainWindow->showNormal();
+    m_plotMainWindow->raise();
 }

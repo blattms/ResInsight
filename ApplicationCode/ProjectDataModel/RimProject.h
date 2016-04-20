@@ -68,11 +68,11 @@ public:
     caf::PdmChildField<RimWellPathImport*>              wellPathImport;
     caf::PdmChildField<RimMainPlotCollection*>          mainPlotCollection;
     caf::PdmChildField<RimViewLinkerCollection*>        viewLinkerCollection;
-    caf::PdmChildField<RimGraphPlotCollection*>         graphPlotCollection;
     caf::PdmChildArrayField<RimCommandObject*>          commandObjects;
     caf::PdmField<QString>                              treeViewState;
     caf::PdmField<QString>                              currentModelIndexPath;
 
+    RimGraphPlotCollection* graphPlotCollection();
 
     void            setScriptDirectories(const QString& scriptDirectories);
     QString         projectFileVersionString() const;
@@ -108,6 +108,8 @@ private:
 
 private:
     caf::PdmField<QString>      m_projectFileVersionString;
+
+    caf::PdmChildField<RimGraphPlotCollection*>         m_graphPlotCollection;
 
     caf::PdmField<int>                                  nextValidCaseId;          // Unique case ID within a project, used to identify a case from Octave scripts
     caf::PdmField<int>                                  nextValidCaseGroupId;     // Unique case group ID within a project, used to identify a case group from Octave scripts

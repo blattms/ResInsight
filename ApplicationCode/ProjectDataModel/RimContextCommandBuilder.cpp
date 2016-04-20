@@ -138,6 +138,8 @@ QStringList RimContextCommandBuilder::commandsFromSelection()
             commandIds << "RicNewViewFeature";
             commandIds << "RicEclipseCaseNewGroupFeature";
             commandIds << "RicExecuteScriptForCasesFeature";
+
+            commandIds << "RicCreateGraphPlotMainWindowFeature";
         }
         else if (dynamic_cast<RimGeoMechCase*>(uiItem))
         {
@@ -276,10 +278,6 @@ QStringList RimContextCommandBuilder::commandsFromSelection()
         else if (dynamic_cast<RimEclipseWell*>(uiItem))
         {
             commandIds << "RicNewSimWellCrossSectionFeature";
-        }
-        else if (dynamic_cast<RimGraphPlotCollection*>(uiItem))
-        {
-            commandIds << "RicCreateGraphPlotMainWindowFeature";
         }
 
         if (dynamic_cast<RimView*>(uiItem))
