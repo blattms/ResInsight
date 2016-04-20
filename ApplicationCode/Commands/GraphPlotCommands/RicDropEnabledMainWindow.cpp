@@ -98,6 +98,7 @@ void RicDropEnabledMainWindow::handleDockWidgetDrop()
 
 void RicDropEnabledMainWindow::dragStarted(bool started)
 {
+/*
     if(started)
     {
         if(QDockWidget* dock = qobject_cast<QDockWidget*>(sender()))
@@ -105,16 +106,19 @@ void RicDropEnabledMainWindow::dragStarted(bool started)
         else
             dw = NULL;
     }
+*/
 }
 
 void RicDropEnabledMainWindow::enterEvent(QEvent* event)
 {
-    handleDockWidgetDrop();
+//    handleDockWidgetDrop();
 }
 
 void RicDropEnabledMainWindow::dragEnded()
 {
+/*
     handleDockWidgetDrop();
 
     dw = NULL;
+*/
 }

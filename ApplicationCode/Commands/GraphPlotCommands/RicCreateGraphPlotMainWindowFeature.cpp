@@ -160,6 +160,7 @@ RiuResultQwtPlot* RicCreateGraphPlotMainWindowFeature::createPlotWidget(QWidget*
 }
 
 
+/*
 class EventDebugger : public QObject
  {
  public:
@@ -180,15 +181,16 @@ class EventDebugger : public QObject
 
     return QObject::eventFilter(obj, event);
 
-/*
+/ *
      if (event->type() == QEvent::KeyPress) {
          QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
          return true;
      } else {
          // standard event processing
      }
-*/
+* /
  }
+*/
 
 
 //--------------------------------------------------------------------------------------------------

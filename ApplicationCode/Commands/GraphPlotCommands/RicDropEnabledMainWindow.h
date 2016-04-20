@@ -32,14 +32,15 @@ public:
     explicit RicDropEnabledMainWindow(QWidget *parent = 0, Qt::WindowFlags flags = 0);
     ~RicDropEnabledMainWindow();
 
-    static void handleDockWidgetDrop();
-
 public slots:
     void dragStarted(bool);
     void dragEnded();
 
 protected:
     virtual void enterEvent(QEvent* event);
+
+private:
+    static void handleDockWidgetDrop();
 
 private:
     static QDockWidget* dw;
