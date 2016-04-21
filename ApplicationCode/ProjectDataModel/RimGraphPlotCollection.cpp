@@ -20,6 +20,9 @@
 
 #include "RimGraphPlot.h"
 #include "GraphPlotCommands/RicDropEnabledMainWindow.h"
+#include "RifEclipseSummaryTools.h"
+#include "RifReaderEclipseSummary.h"
+#include "QDockWidget"
 
 
 CAF_PDM_SOURCE_INIT(RimGraphPlotCollection, "RimGraphPlotCollection");
@@ -31,8 +34,8 @@ RimGraphPlotCollection::RimGraphPlotCollection()
 {
     CAF_PDM_InitObject("Graph Plots", "", "", "");
 
-    CAF_PDM_InitFieldNoDefault(&graphPlots, "GraphPlots", "",  "", "", "");
-    graphPlots.uiCapability()->setUiHidden(true);
+    CAF_PDM_InitFieldNoDefault(&m_graphPlots, "GraphPlots", "",  "", "", "");
+    m_graphPlots.uiCapability()->setUiHidden(true);
 
     m_plotMainWindow = NULL;
 }
@@ -42,10 +45,16 @@ RimGraphPlotCollection::RimGraphPlotCollection()
 //--------------------------------------------------------------------------------------------------
 RimGraphPlotCollection::~RimGraphPlotCollection()
 {
-    graphPlots.deleteAllChildObjects();
+    m_graphPlots.deleteAllChildObjects();
 
     m_plotMainWindow->close();
     m_plotMainWindow->deleteLater();
+
+    for (auto it = m_summaryFileReaders.begin(); it != m_summaryFileReaders.end(); it++)
+    {
+        delete it->second;
+    }
+    m_summaryFileReaders.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,4 +70,132 @@ void RimGraphPlotCollection::showPlotWindow()
 
     m_plotMainWindow->showNormal();
     m_plotMainWindow->raise();
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+RifReaderEclipseSummary* RimGraphPlotCollection::fileReader(const QString& eclipseCase)
+{
+    auto it = m_summaryFileReaders.find(eclipseCase);
+    if (it != m_summaryFileReaders.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        return createReader(eclipseCase);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+RifReaderEclipseSummary* RimGraphPlotCollection::createReader(const QString& eclipseCase)
+{
+    std::string headerFile;
+    bool isFormatted = false;
+    RifEclipseSummaryTools::findSummaryHeaderFile(eclipseCase.toStdString(), &headerFile, &isFormatted);
+
+    std::vector<std::string> dataFiles = RifEclipseSummaryTools::findSummaryDataFiles(eclipseCase.toStdString());
+
+    RifReaderEclipseSummary* reader = new RifReaderEclipseSummary;
+    if (!reader->open(headerFile, dataFiles))
+    {
+        delete reader;
+
+        return NULL;
+    }
+    else
+    {
+        m_summaryFileReaders.insert(std::make_pair(eclipseCase, new RifReaderEclipseSummary));
+        return reader;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimGraphPlotCollection::createDockWindowsForAllPlots()
+{
+    for (size_t i = 0; i < m_graphPlots.size(); i++)
+    {
+        if (!dockWidgetFromPlot(m_graphPlots[i]))
+        {
+            createDockWidget(m_graphPlots[i]);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+QDockWidget* RimGraphPlotCollection::dockWidgetFromPlot(RimGraphPlot* graphPlot)
+{
+    foreach(QDockWidget* dockW, additionalProjectViews)
+    {
+        if (dockW && dockW->widget() == graphPlot->widget())
+        {
+            return dockW;
+        }
+    }
+
+    return NULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimGraphPlotCollection::createDockWidget(RimGraphPlot* graphPlot)
+{
+    assert(m_plotMainWindow != NULL);
+
+    QDockWidget* dockWidget = new QDockWidget(QString("Plot Widget Tree (%1)").arg(additionalProjectViews.size() + 1), m_plotMainWindow);
+    dockWidget->setObjectName("dockWidget");
+    // dockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
+    QWidget* widget = graphPlot->createPlotWidget(m_plotMainWindow);
+
+    dockWidget->setWidget(widget);
+
+    m_plotMainWindow->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+
+    additionalProjectViews.push_back(dockWidget);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimGraphPlotCollection::eraseDockWidget(RimGraphPlot* graphPlot)
+{
+    QDockWidget* dockW = dockWidgetFromPlot(graphPlot);
+    if (dockW)
+    {
+        m_plotMainWindow->removeDockWidget(dockW);
+        dockW->setWidget(NULL);
+        dockW->deleteLater();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimGraphPlotCollection::deletePlot(RimGraphPlot* graphPlot)
+{
+    m_graphPlots.removeChildObject(graphPlot);
+    eraseDockWidget(graphPlot);
+
+    graphPlot->deletePlotWidget();
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+RimGraphPlot* RimGraphPlotCollection::createAppendPlot(const QString& name)
+{
+    RimGraphPlot* graphPlot = new RimGraphPlot;
+
+    m_graphPlots.push_back(graphPlot);
+
+    return graphPlot;
 }

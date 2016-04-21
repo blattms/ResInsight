@@ -41,6 +41,7 @@ protected:
     virtual void setupActionLook( QAction* actionToSetup );
 
 private:
+    // TODO: Remove these when prototyping stage is completed
     RiuResultQwtPlot*   createPlotWidget(QWidget* parent);
     QDockWidget*        createDockWidget(RicDropEnabledMainWindow* mainWindow, Qt::DockWidgetArea area, const QString& name);
 };

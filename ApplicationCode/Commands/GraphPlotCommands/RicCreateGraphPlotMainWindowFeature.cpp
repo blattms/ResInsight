@@ -19,21 +19,27 @@
 
 #include "RicCreateGraphPlotMainWindowFeature.h"
 
+#include "RiaApplication.h"
 
-#include <QAction>
-#include <QMainWindow>
-#include <QDockWidget>
-#include <QEvent>
+#include "RicDropEnabledMainWindow.h"
 
+#include "RimEclipseCase.h"
+#include "RimGraphPlot.h"
+#include "RimGraphPlotCollection.h"
+#include "RimProject.h"
+#include "RimSummaryCurve.h"
 #include "RiuResultQwtPlot.h"
+
+#include "cafSelectionManager.h"
 
 #include "cvfBase.h"
 #include "cvfColor3.h"
-#include "RicDropEnabledMainWindow.h"
-#include "QApplication"
-#include "RimProject.h"
-#include "RiaApplication.h"
-#include "RimGraphPlotCollection.h"
+
+#include <QAction>
+#include <QApplication>
+#include <QDockWidget>
+#include <QEvent>
+#include <QMainWindow>
 
 CAF_CMD_SOURCE_INIT(RicCreateGraphPlotMainWindowFeature, "RicCreateGraphPlotMainWindowFeature");
 
@@ -55,6 +61,19 @@ void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
     {
         RimGraphPlotCollection* graphPlotCollection = proj->graphPlotCollection();
         graphPlotCollection->showPlotWindow();
+
+        RimEclipseCase* destinationObject = dynamic_cast<RimEclipseCase*>(caf::SelectionManager::instance()->selectedItem());
+        if (destinationObject)
+        {
+            RimGraphPlot* graphPlot = graphPlotCollection->createAppendPlot("My Plot");
+            RimSummaryCurve* summaryCurve = new RimSummaryCurve;
+            summaryCurve->m_eclipseCase = destinationObject;
+
+            graphPlot->summaryCurves.push_back(summaryCurve);
+            graphPlotCollection->updateConnectedEditors();
+
+            graphPlotCollection->createDockWindowsForAllPlots();
+        }
     }
 }
 
@@ -100,40 +119,6 @@ RiuResultQwtPlot* RicCreateGraphPlotMainWindowFeature::createPlotWidget(QWidget*
     return qwtPlot;
 }
 
-
-/*
-class EventDebugger : public QObject
- {
- public:
-     EventDebugger() {} ;
-
- protected:
-     bool eventFilter(QObject *obj, QEvent *event);
- };
-
- bool EventDebugger::eventFilter(QObject *obj, QEvent *event)
- {
-    //qDebug() << event->type();
-
-    if (event->type() == 71)
-    {
-        RicDropEnabledMainWindow::handleDockWidgetDrop();
-    }
-
-    return QObject::eventFilter(obj, event);
-
-/ *
-     if (event->type() == QEvent::KeyPress) {
-         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-         return true;
-     } else {
-         // standard event processing
-     }
-* /
- }
-*/
-
-
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
@@ -147,13 +132,8 @@ QDockWidget* RicCreateGraphPlotMainWindowFeature::createDockWidget(RicDropEnable
 
     mainWindow->addDockWidget(area, dockWidget);
 
-    connect(dockWidget, SIGNAL(topLevelChanged(bool)) , mainWindow, SLOT(dragStarted(bool)));
-    connect(dockWidget, SIGNAL(dockLocationChanged (Qt::DockWidgetArea)) , mainWindow, SLOT(dragEnded()));
-
-/*
-    EventDebugger* evDebug = new EventDebugger;
-    dockWidget->installEventFilter(evDebug);
-*/
+    connect(dockWidget, SIGNAL(topLevelChanged(bool)), mainWindow, SLOT(dragStarted(bool)));
+    connect(dockWidget, SIGNAL(dockLocationChanged (Qt::DockWidgetArea)), mainWindow, SLOT(dragEnded()));
 
     return dockWidget;
 }

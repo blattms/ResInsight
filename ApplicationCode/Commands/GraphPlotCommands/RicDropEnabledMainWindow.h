@@ -44,6 +44,8 @@ private:
 
 private:
     static QDockWidget* dw;
+
+
 };
 
 
