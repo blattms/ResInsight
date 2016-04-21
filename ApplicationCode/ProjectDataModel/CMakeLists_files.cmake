@@ -78,6 +78,7 @@ ${CEE_CURRENT_LIST_DIR}RimContextCommandBuilder.h
 ${CEE_CURRENT_LIST_DIR}RimGridCollection.h
 ${CEE_CURRENT_LIST_DIR}RimGraphPlot.h
 ${CEE_CURRENT_LIST_DIR}RimGraphPlotCollection.h
+${CEE_CURRENT_LIST_DIR}RimSummaryCurve.h
 )
 
 set (SOURCE_GROUP_SOURCE_FILES
@@ -154,6 +155,7 @@ ${CEE_CURRENT_LIST_DIR}RimContextCommandBuilder.cpp
 ${CEE_CURRENT_LIST_DIR}RimGridCollection.cpp
 ${CEE_CURRENT_LIST_DIR}RimGraphPlot.cpp
 ${CEE_CURRENT_LIST_DIR}RimGraphPlotCollection.cpp
+${CEE_CURRENT_LIST_DIR}RimSummaryCurve.cpp
 )
 
 list(APPEND CODE_HEADER_FILES
