@@ -16,23 +16,26 @@
 //
 /////////////////////////////////////////////////////////////////////////////////
 
-#include "RimGraphPlotCollection.h"
+#include "RimSummaryPlotCollection.h"
 
-#include "RimGraphPlot.h"
+#include "RimSummaryPlot.h"
 #include "GraphPlotCommands/RicDropEnabledMainWindow.h"
 #include "RifEclipseSummaryTools.h"
 #include "RifReaderEclipseSummary.h"
 #include "QDockWidget"
 
 
-CAF_PDM_SOURCE_INIT(RimGraphPlotCollection, "RimGraphPlotCollection");
+CAF_PDM_SOURCE_INIT(RimSummaryPlotCollection, "RimGraphPlotCollection");
 
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RimGraphPlotCollection::RimGraphPlotCollection()
+RimSummaryPlotCollection::RimSummaryPlotCollection()
 {
     CAF_PDM_InitObject("Graph Plots", "", "", "");
+
+    CAF_PDM_InitField(&showWindow, "ShowWindow", true, "Show 2D Plot windows", "", "", "");
+    showWindow.uiCapability()->setUiHidden(true);
 
     CAF_PDM_InitFieldNoDefault(&m_graphPlots, "GraphPlots", "",  "", "", "");
     m_graphPlots.uiCapability()->setUiHidden(true);
@@ -43,7 +46,7 @@ RimGraphPlotCollection::RimGraphPlotCollection()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RimGraphPlotCollection::~RimGraphPlotCollection()
+RimSummaryPlotCollection::~RimSummaryPlotCollection()
 {
     m_graphPlots.deleteAllChildObjects();
 
@@ -60,7 +63,7 @@ RimGraphPlotCollection::~RimGraphPlotCollection()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void RimGraphPlotCollection::showPlotWindow()
+void RimSummaryPlotCollection::showPlotWindow()
 {
     if (!m_plotMainWindow)
     {
@@ -75,7 +78,7 @@ void RimGraphPlotCollection::showPlotWindow()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RifReaderEclipseSummary* RimGraphPlotCollection::fileReader(const QString& eclipseCase)
+RifReaderEclipseSummary* RimSummaryPlotCollection::fileReader(const QString& eclipseCase)
 {
     auto it = m_summaryFileReaders.find(eclipseCase);
     if (it != m_summaryFileReaders.end())
@@ -91,7 +94,7 @@ RifReaderEclipseSummary* RimGraphPlotCollection::fileReader(const QString& eclip
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RifReaderEclipseSummary* RimGraphPlotCollection::createReader(const QString& eclipseCase)
+RifReaderEclipseSummary* RimSummaryPlotCollection::createReader(const QString& eclipseCase)
 {
     std::string headerFile;
     bool isFormatted = false;
@@ -116,7 +119,7 @@ RifReaderEclipseSummary* RimGraphPlotCollection::createReader(const QString& ecl
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void RimGraphPlotCollection::createDockWindowsForAllPlots()
+void RimSummaryPlotCollection::createDockWindowsForAllPlots()
 {
     for (size_t i = 0; i < m_graphPlots.size(); i++)
     {
@@ -130,7 +133,7 @@ void RimGraphPlotCollection::createDockWindowsForAllPlots()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-QDockWidget* RimGraphPlotCollection::dockWidgetFromPlot(RimGraphPlot* graphPlot)
+QDockWidget* RimSummaryPlotCollection::dockWidgetFromPlot(RimSummaryPlot* graphPlot)
 {
     foreach(QDockWidget* dockW, additionalProjectViews)
     {
@@ -146,7 +149,7 @@ QDockWidget* RimGraphPlotCollection::dockWidgetFromPlot(RimGraphPlot* graphPlot)
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void RimGraphPlotCollection::createDockWidget(RimGraphPlot* graphPlot)
+void RimSummaryPlotCollection::createDockWidget(RimSummaryPlot* graphPlot)
 {
     assert(m_plotMainWindow != NULL);
 
@@ -166,7 +169,7 @@ void RimGraphPlotCollection::createDockWidget(RimGraphPlot* graphPlot)
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void RimGraphPlotCollection::eraseDockWidget(RimGraphPlot* graphPlot)
+void RimSummaryPlotCollection::eraseDockWidget(RimSummaryPlot* graphPlot)
 {
     QDockWidget* dockW = dockWidgetFromPlot(graphPlot);
     if (dockW)
@@ -180,7 +183,7 @@ void RimGraphPlotCollection::eraseDockWidget(RimGraphPlot* graphPlot)
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void RimGraphPlotCollection::deletePlot(RimGraphPlot* graphPlot)
+void RimSummaryPlotCollection::deletePlot(RimSummaryPlot* graphPlot)
 {
     m_graphPlots.removeChildObject(graphPlot);
     eraseDockWidget(graphPlot);
@@ -191,11 +194,55 @@ void RimGraphPlotCollection::deletePlot(RimGraphPlot* graphPlot)
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RimGraphPlot* RimGraphPlotCollection::createAppendPlot(const QString& name)
+RimSummaryPlot* RimSummaryPlotCollection::createAppendPlot(const QString& name)
 {
-    RimGraphPlot* graphPlot = new RimGraphPlot;
+    RimSummaryPlot* graphPlot = new RimSummaryPlot;
 
     m_graphPlots.push_back(graphPlot);
 
     return graphPlot;
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimSummaryPlotCollection::hidePlotWindow()
+{
+    if (m_plotMainWindow)
+    {
+        m_plotMainWindow->hide();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimSummaryPlotCollection::fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue)
+{
+    if (changedField == &showWindow)
+    {
+        if (showWindow)
+        {
+            showPlotWindow();
+        }
+        else
+        {
+            hidePlotWindow();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimSummaryPlotCollection::initAfterRead()
+{
+    if (showWindow)
+    {
+        showPlotWindow();
+    }
+    else
+    {
+        hidePlotWindow();
+    }
 }

@@ -34,7 +34,7 @@
 #include "RimEclipseCaseCollection.h"
 #include "RimGeoMechCase.h"
 #include "RimGeoMechModels.h"
-#include "RimGraphPlotCollection.h"
+#include "RimSummaryPlotCollection.h"
 #include "RimIdenticalGridCaseGroup.h"
 #include "RimMainPlotCollection.h"
 #include "RimOilField.h"
@@ -755,11 +755,11 @@ void RimProject::defineUiTreeOrdering(caf::PdmUiTreeOrdering& uiTreeOrdering, QS
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RimGraphPlotCollection* RimProject::graphPlotCollection()
+RimSummaryPlotCollection* RimProject::graphPlotCollection()
 {
     if (!m_graphPlotCollection)
     {
-        m_graphPlotCollection = new RimGraphPlotCollection;
+        m_graphPlotCollection = new RimSummaryPlotCollection;
         m_graphPlotCollection->updateConnectedEditors();
     }
 

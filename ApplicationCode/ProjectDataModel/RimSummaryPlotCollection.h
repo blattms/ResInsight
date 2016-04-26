@@ -25,7 +25,7 @@
 #include <QPointer>
 #include <QDockWidget>
 
-class RimGraphPlot;
+class RimSummaryPlot;
 class RicDropEnabledMainWindow;
 class RifReaderEclipseSummary;
 
@@ -33,30 +33,38 @@ class RifReaderEclipseSummary;
 ///  
 ///  
 //==================================================================================================
-class RimGraphPlotCollection : public caf::PdmObject
+class RimSummaryPlotCollection : public caf::PdmObject
 {
     CAF_PDM_HEADER_INIT;
 public:
-    RimGraphPlotCollection();
-    virtual ~RimGraphPlotCollection();
+    RimSummaryPlotCollection();
+    virtual ~RimSummaryPlotCollection();
 
     void showPlotWindow();
+    void hidePlotWindow();
 
     RifReaderEclipseSummary* fileReader(const QString& eclipseCase);
 
     void createDockWindowsForAllPlots();
-    void deletePlot(RimGraphPlot* graphPlot);
-    RimGraphPlot* createAppendPlot(const QString& name);
+    void deletePlot(RimSummaryPlot* graphPlot);
+    RimSummaryPlot* createAppendPlot(const QString& name);
+
+    caf::PdmField<bool>                     showWindow;
+
+    virtual caf::PdmFieldHandle*            objectToggleField() { return &showWindow; }
+    virtual void                                        fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
+    virtual void                                        initAfterRead();
+
 
 private:
-    caf::PdmChildArrayField<RimGraphPlot*> m_graphPlots;
+    caf::PdmChildArrayField<RimSummaryPlot*> m_graphPlots;
 
 private:
     RifReaderEclipseSummary* createReader(const QString& eclipseCase);
 
-    QDockWidget* dockWidgetFromPlot(RimGraphPlot* graphPlot);
-    void createDockWidget(RimGraphPlot* graphPlot);
-    void eraseDockWidget(RimGraphPlot* graphPlot);
+    QDockWidget* dockWidgetFromPlot(RimSummaryPlot* graphPlot);
+    void createDockWidget(RimSummaryPlot* graphPlot);
+    void eraseDockWidget(RimSummaryPlot* graphPlot);
 
 private:
     RicDropEnabledMainWindow* m_plotMainWindow;

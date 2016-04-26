@@ -33,13 +33,13 @@ class RimSummaryCurve;
 ///  
 ///  
 //==================================================================================================
-class RimGraphPlot : public caf::PdmObject
+class RimSummaryPlot : public caf::PdmObject
 {
     CAF_PDM_HEADER_INIT;
 
 public:
-    RimGraphPlot();
-    virtual ~RimGraphPlot();
+    RimSummaryPlot();
+    virtual ~RimSummaryPlot();
 
     QWidget* createPlotWidget(QWidget* parent);
     void deletePlotWidget();

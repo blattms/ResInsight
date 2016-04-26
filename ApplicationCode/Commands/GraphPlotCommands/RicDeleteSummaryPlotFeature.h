@@ -23,14 +23,11 @@
 #include "cafPdmPointer.h"
 
 
-class RiuResultQwtPlot;
-class QDockWidget;
-class RicDropEnabledMainWindow;
 
 //==================================================================================================
 /// 
 //==================================================================================================
-class RicCreateGraphPlotMainWindowFeature : public caf::CmdFeature
+class RicDeleteSummaryPlotFeature : public caf::CmdFeature
 {
     CAF_CMD_HEADER_INIT;
 
@@ -40,10 +37,6 @@ protected:
     virtual void onActionTriggered( bool isChecked );
     virtual void setupActionLook( QAction* actionToSetup );
 
-private:
-    // TODO: Remove these when prototyping stage is completed
-    RiuResultQwtPlot*   createPlotWidget(QWidget* parent);
-    QDockWidget*        createDockWidget(RicDropEnabledMainWindow* mainWindow, Qt::DockWidgetArea area, const QString& name);
 };
 
 

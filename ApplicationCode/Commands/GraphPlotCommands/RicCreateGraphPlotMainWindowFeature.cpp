@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (C) 2015-     Statoil ASA
-//  Copyright (C) 2015-     Ceetron Solutions AS
+//  Copyright (C) 2016 Statoil ASA
 // 
 //  ResInsight is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,8 +23,8 @@
 #include "RicDropEnabledMainWindow.h"
 
 #include "RimEclipseCase.h"
-#include "RimGraphPlot.h"
-#include "RimGraphPlotCollection.h"
+#include "RimSummaryPlot.h"
+#include "RimSummaryPlotCollection.h"
 #include "RimProject.h"
 #include "RimSummaryCurve.h"
 #include "RiuResultQwtPlot.h"
@@ -59,13 +58,13 @@ void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
     RimProject* proj = RiaApplication::instance()->project();
     if (proj)
     {
-        RimGraphPlotCollection* graphPlotCollection = proj->graphPlotCollection();
+        RimSummaryPlotCollection* graphPlotCollection = proj->graphPlotCollection();
         graphPlotCollection->showPlotWindow();
 
         RimEclipseCase* destinationObject = dynamic_cast<RimEclipseCase*>(caf::SelectionManager::instance()->selectedItem());
         if (destinationObject)
         {
-            RimGraphPlot* graphPlot = graphPlotCollection->createAppendPlot("My Plot");
+            RimSummaryPlot* graphPlot = graphPlotCollection->createAppendPlot("My Plot");
             RimSummaryCurve* summaryCurve = new RimSummaryCurve;
             summaryCurve->m_eclipseCase = destinationObject;
 

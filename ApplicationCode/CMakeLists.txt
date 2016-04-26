@@ -61,6 +61,7 @@ set( APPLICATION_FILES
     Application/RiaImageCompareReporter.cpp
     Application/RiaProjectModifier.cpp
     Application/RiaRegressionTest.cpp
+
 )
 
 set( USER_INTERFACE_FILES

@@ -16,62 +16,64 @@
 //
 /////////////////////////////////////////////////////////////////////////////////
 
-#include "RimGraphPlot.h"
+#include "RicDeleteSummaryPlotFeature.h"
+
+#include "RiaApplication.h"
+
+#include "RicDropEnabledMainWindow.h"
+
+#include "RimEclipseCase.h"
+#include "RimSummaryPlot.h"
+#include "RimSummaryPlotCollection.h"
+#include "RimProject.h"
 #include "RimSummaryCurve.h"
 #include "RiuResultQwtPlot.h"
 
+#include "cafSelectionManager.h"
 
-CAF_PDM_SOURCE_INIT(RimGraphPlot, "GraphPlot");
+#include "cvfBase.h"
+#include "cvfColor3.h"
+
+#include <QAction>
+#include <QApplication>
+#include <QDockWidget>
+#include <QEvent>
+#include <QMainWindow>
+
+CAF_CMD_SOURCE_INIT(RicDeleteSummaryPlotFeature, "RicDeleteSummaryPlotFeature");
 
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RimGraphPlot::RimGraphPlot()
+bool RicDeleteSummaryPlotFeature::isCommandEnabled()
 {
-    CAF_PDM_InitObject("Graph Plot", "", "", "");
-
-    CAF_PDM_InitFieldNoDefault(&summaryCurves, "SummaryCurves", "",  "", "", "");
-    summaryCurves.uiCapability()->setUiHidden(true);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RimGraphPlot::~RimGraphPlot()
+void RicDeleteSummaryPlotFeature::onActionTriggered(bool isChecked)
 {
-    deletePlotWidget();
-
-    summaryCurves.deleteAllChildObjects();
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-QWidget* RimGraphPlot::widget()
-{
-    return m_qwtPlot;
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-QWidget* RimGraphPlot::createPlotWidget(QWidget* parent)
-{
-    assert(m_qwtPlot.isNull());
-
-    m_qwtPlot = new RiuResultQwtPlot(parent);
-
-    return m_qwtPlot;
-}
-
-//--------------------------------------------------------------------------------------------------
-/// 
-//--------------------------------------------------------------------------------------------------
-void RimGraphPlot::deletePlotWidget()
-{
-    if (m_qwtPlot)
+    RimSummaryPlot* summaryPlot = dynamic_cast<RimSummaryPlot*>(caf::SelectionManager::instance()->selectedItem());
+    if (summaryPlot)
     {
-        m_qwtPlot->deleteLater();
-        m_qwtPlot = NULL;
+        RimSummaryPlotCollection* graphPlotCollection = NULL;
+        summaryPlot->firstAnchestorOrThisOfType(graphPlotCollection);
+        if (graphPlotCollection)
+        {
+            graphPlotCollection->deletePlot(summaryPlot);
+            graphPlotCollection->updateConnectedEditors();
+        }
     }
 }
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RicDeleteSummaryPlotFeature::setupActionLook(QAction* actionToSetup)
+{
+    //actionToSetup->setIcon(QIcon(":/CrossSection16x16.png"));
+    actionToSetup->setText("Delete (Summary Plot)");
+}
+

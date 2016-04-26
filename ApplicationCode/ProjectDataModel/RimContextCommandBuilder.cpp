@@ -39,7 +39,8 @@
 #include "RimGeoMechPropertyFilter.h"
 #include "RimGeoMechPropertyFilterCollection.h"
 #include "RimGeoMechView.h"
-#include "RimGraphPlotCollection.h"
+#include "RimSummaryPlot.h"
+#include "RimSummaryPlotCollection.h"
 #include "RimIdenticalGridCaseGroup.h"
 #include "RimScriptCollection.h"
 #include "RimViewController.h"
@@ -278,6 +279,10 @@ QStringList RimContextCommandBuilder::commandsFromSelection()
         else if (dynamic_cast<RimEclipseWell*>(uiItem))
         {
             commandIds << "RicNewSimWellCrossSectionFeature";
+        }
+        else if (dynamic_cast<RimSummaryPlot*>(uiItem))
+        {
+            commandIds << "RicDeleteSummaryPlotFeature";
         }
 
         if (dynamic_cast<RimView*>(uiItem))

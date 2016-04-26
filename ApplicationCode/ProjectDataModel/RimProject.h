@@ -32,7 +32,7 @@ class RigMainGrid;
 class RimCase;
 class RimCommandObject;
 class RimEclipseCase;
-class RimGraphPlotCollection;
+class RimSummaryPlotCollection;
 class RimIdenticalGridCaseGroup;
 class RimMainPlotCollection;
 class RimOilField;
@@ -72,7 +72,7 @@ public:
     caf::PdmField<QString>                              treeViewState;
     caf::PdmField<QString>                              currentModelIndexPath;
 
-    RimGraphPlotCollection* graphPlotCollection();
+    RimSummaryPlotCollection* graphPlotCollection();
 
     void            setScriptDirectories(const QString& scriptDirectories);
     QString         projectFileVersionString() const;
@@ -109,7 +109,7 @@ private:
 private:
     caf::PdmField<QString>      m_projectFileVersionString;
 
-    caf::PdmChildField<RimGraphPlotCollection*>         m_graphPlotCollection;
+    caf::PdmChildField<RimSummaryPlotCollection*>         m_graphPlotCollection;
 
     caf::PdmField<int>                                  nextValidCaseId;          // Unique case ID within a project, used to identify a case from Octave scripts
     caf::PdmField<int>                                  nextValidCaseGroupId;     // Unique case group ID within a project, used to identify a case group from Octave scripts

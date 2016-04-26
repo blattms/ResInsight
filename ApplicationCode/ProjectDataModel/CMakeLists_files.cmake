@@ -76,8 +76,8 @@ ${CEE_CURRENT_LIST_DIR}RimCrossSection.h
 ${CEE_CURRENT_LIST_DIR}RimCrossSectionCollection.h
 ${CEE_CURRENT_LIST_DIR}RimContextCommandBuilder.h
 ${CEE_CURRENT_LIST_DIR}RimGridCollection.h
-${CEE_CURRENT_LIST_DIR}RimGraphPlot.h
-${CEE_CURRENT_LIST_DIR}RimGraphPlotCollection.h
+${CEE_CURRENT_LIST_DIR}RimSummaryPlot.h
+${CEE_CURRENT_LIST_DIR}RimSummaryPlotCollection.h
 ${CEE_CURRENT_LIST_DIR}RimSummaryCurve.h
 )
 
@@ -153,8 +153,8 @@ ${CEE_CURRENT_LIST_DIR}RimCrossSection.cpp
 ${CEE_CURRENT_LIST_DIR}RimCrossSectionCollection.cpp
 ${CEE_CURRENT_LIST_DIR}RimContextCommandBuilder.cpp
 ${CEE_CURRENT_LIST_DIR}RimGridCollection.cpp
-${CEE_CURRENT_LIST_DIR}RimGraphPlot.cpp
-${CEE_CURRENT_LIST_DIR}RimGraphPlotCollection.cpp
+${CEE_CURRENT_LIST_DIR}RimSummaryPlot.cpp
+${CEE_CURRENT_LIST_DIR}RimSummaryPlotCollection.cpp
 ${CEE_CURRENT_LIST_DIR}RimSummaryCurve.cpp
 )
 
