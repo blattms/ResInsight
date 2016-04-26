@@ -22,7 +22,7 @@
 
 #include "RicDropEnabledMainWindow.h"
 
-#include "RimEclipseCase.h"
+#include "RimEclipseResultCase.h"
 #include "RimSummaryPlot.h"
 #include "RimSummaryPlotCollection.h"
 #include "RimProject.h"
@@ -61,7 +61,7 @@ void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
         RimSummaryPlotCollection* graphPlotCollection = proj->graphPlotCollection();
         graphPlotCollection->showPlotWindow();
 
-        RimEclipseCase* destinationObject = dynamic_cast<RimEclipseCase*>(caf::SelectionManager::instance()->selectedItem());
+        RimEclipseResultCase* destinationObject = dynamic_cast<RimEclipseResultCase*>(caf::SelectionManager::instance()->selectedItem());
         if (destinationObject)
         {
             RimSummaryPlot* graphPlot = graphPlotCollection->createAppendPlot("My Plot");

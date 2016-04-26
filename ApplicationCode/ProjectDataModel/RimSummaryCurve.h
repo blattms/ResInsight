@@ -25,8 +25,8 @@
 #include "cafPdmPtrField.h"
 
 
-class RimEclipseCase;
-
+class RimEclipseResultCase;
+class RifReaderEclipseSummary;
 
 //==================================================================================================
 ///  
@@ -39,8 +39,17 @@ public:
     RimSummaryCurve();
     virtual ~RimSummaryCurve();
 
-    caf::PdmPtrField<RimEclipseCase*> m_eclipseCase;
+    caf::PdmPtrField<RimEclipseResultCase*> m_eclipseCase;
 
     caf::PdmField<QString> m_variableName;
+
+    virtual QList<caf::PdmOptionItemInfo> calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool* useOptionsOnly);
+
+private:
+    RifReaderEclipseSummary* summaryReader();
+
+    virtual void                            fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
+
+private:
 
 };

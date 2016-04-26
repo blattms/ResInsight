@@ -111,7 +111,7 @@ RifReaderEclipseSummary* RimSummaryPlotCollection::createReader(const QString& e
     }
     else
     {
-        m_summaryFileReaders.insert(std::make_pair(eclipseCase, new RifReaderEclipseSummary));
+        m_summaryFileReaders.insert(std::make_pair(eclipseCase, reader));
         return reader;
     }
 }

@@ -45,6 +45,7 @@ public:
     void deletePlotWidget();
 
     QWidget* widget();
+    RiuResultQwtPlot* qwtPlot();
 
     caf::PdmChildArrayField<RimSummaryCurve*> summaryCurves;
 
