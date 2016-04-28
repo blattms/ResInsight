@@ -17,14 +17,19 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 #include "RimSummaryCurve.h"
-#include "RimEclipseResultCase.h"
-#include "RimDefines.h"
-#include "RimSummaryPlotCollection.h"
+
+#include "RiaApplication.h"
 #include "RifReaderEclipseSummary.h"
-#include "cafPdmUiListEditor.h"
-#include "cafPdmUiComboBoxEditor.h"
-#include "RiuResultQwtPlot.h"
+#include "RimDefines.h"
+#include "RimEclipseResultCase.h"
+#include "RimProject.h"
 #include "RimSummaryPlot.h"
+#include "RimSummaryPlotCollection.h"
+#include "RiuResultQwtPlot.h"
+
+#include "cafPdmUiComboBoxEditor.h"
+#include "cafPdmUiListEditor.h"
+#include "cafPdmUiTreeOrdering.h"
 
 CAF_PDM_SOURCE_INIT(RimSummaryCurve, "SummaryCurve");
 
@@ -37,7 +42,9 @@ RimSummaryCurve::RimSummaryCurve()
 
     CAF_PDM_InitFieldNoDefault(&m_eclipseCase, "ReferencedEclipseCase", "Eclipse Case", "", "", "");
     m_eclipseCase.uiCapability()->setUiChildrenHidden(true);
-    m_eclipseCase.uiCapability()->setUiHidden(true);
+    
+    // TODO: Implement setUiTreeHidden 
+    //m_eclipseCase.uiCapability()->setUiHidden(true);
 
     CAF_PDM_InitFieldNoDefault(&m_variableName, "SummaryVariableName", "Variable Name", "", "", "");
 
@@ -56,30 +63,47 @@ RimSummaryCurve::~RimSummaryCurve()
 //--------------------------------------------------------------------------------------------------
 QList<caf::PdmOptionItemInfo> RimSummaryCurve::calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool* useOptionsOnly)
 {
+    QList<caf::PdmOptionItemInfo> optionList;
     if (fieldNeedingOptions == &m_variableName)
     {
         if (m_eclipseCase)
         {
-            QList<caf::PdmOptionItemInfo> optionList;
-
             RifReaderEclipseSummary* reader = summaryReader();
-            std::vector<std::string> varNames = reader->variableNames();
-
-            for (size_t i = 0; i < varNames.size(); i++)
+            if (reader)
             {
-                QString s = QString::fromStdString(varNames[i]);
-                optionList.push_back(caf::PdmOptionItemInfo(s, s));
+                std::vector<std::string> varNames = reader->variableNames();
+
+                for (auto name : varNames)
+                {
+                    QString s = QString::fromStdString(name);
+                    optionList.push_back(caf::PdmOptionItemInfo(s, s));
+                }
             }
 
             optionList.push_front(caf::PdmOptionItemInfo(RimDefines::undefinedResultName(), RimDefines::undefinedResultName()));
 
             if (useOptionsOnly) *useOptionsOnly = true;
+        }
+    }
+    else if (fieldNeedingOptions == &m_eclipseCase)
+    {
+        RimProject* proj = RiaApplication::instance()->project();
+        std::vector<RimCase*> cases;
 
-            return optionList;
+        proj->allCases(cases);
+
+        for (auto rimCase : cases)
+        {
+            optionList.push_back(caf::PdmOptionItemInfo(rimCase->caseUserDescription(), QVariant::fromValue(caf::PdmPointer<caf::PdmObjectHandle>(rimCase))));
+        }
+
+        if (optionList.size() > 0)
+        {
+            optionList.push_front(caf::PdmOptionItemInfo("None", QVariant::fromValue(caf::PdmPointer<caf::PdmObjectHandle>(NULL))));
         }
     }
 
-    return QList<caf::PdmOptionItemInfo>();
+    return optionList;
 
 }
 
@@ -128,4 +152,14 @@ RifReaderEclipseSummary* RimSummaryCurve::summaryReader()
     QString msjTest = caseNameWithNoExtension.replace("/", "\\");
     
     return plotCollection->fileReader(msjTest);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimSummaryCurve::defineUiTreeOrdering(caf::PdmUiTreeOrdering& uiTreeOrdering, QString uiConfigName /*= ""*/)
+{
+    // TODO: Used to hide the entry for a case in the tree view as we have no
+    // setUiTreeHidden(true)
+    uiTreeOrdering.setForgetRemainingFields(true);
 }

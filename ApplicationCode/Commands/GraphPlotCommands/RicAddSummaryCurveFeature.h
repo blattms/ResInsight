@@ -16,42 +16,24 @@
 //
 /////////////////////////////////////////////////////////////////////////////////
 
-
 #pragma once
 
-#include "cafPdmObject.h"
-#include "cafPdmField.h"
-#include "cafPdmChildArrayField.h"
-#include "cafAppEnum.h"
+#include "cafCmdFeature.h"
 
-#include <QPointer>
-
-class RiuResultQwtPlot;
-class RimSummaryCurve;
 
 //==================================================================================================
-///  
-///  
+/// 
 //==================================================================================================
-class RimSummaryPlot : public caf::PdmObject
+class RicAddSummaryCurveFeature : public caf::CmdFeature
 {
-    CAF_PDM_HEADER_INIT;
+    CAF_CMD_HEADER_INIT;
 
-public:
-    RimSummaryPlot();
-    virtual ~RimSummaryPlot();
-
-    QWidget* createPlotWidget(QWidget* parent);
-    void deletePlotWidget();
-
-    QWidget* widget();
-    RiuResultQwtPlot* qwtPlot();
-
-    void redrawAllCurves();
-
-    caf::PdmChildArrayField<RimSummaryCurve*> summaryCurves;
-
-private:
-    QPointer<RiuResultQwtPlot> m_qwtPlot;
+protected:
+    // Overrides
+    virtual bool isCommandEnabled();
+    virtual void onActionTriggered( bool isChecked );
+    virtual void setupActionLook( QAction* actionToSetup );
 
 };
+
+

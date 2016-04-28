@@ -9,13 +9,14 @@ set (SOURCE_GROUP_HEADER_FILES
 ${CEE_CURRENT_LIST_DIR}RicCreateGraphPlotMainWindowFeature.h
 ${CEE_CURRENT_LIST_DIR}RicDropEnabledMainWindow.h
 ${CEE_CURRENT_LIST_DIR}RicDeleteSummaryPlotFeature.h
-
+${CEE_CURRENT_LIST_DIR}RicAddSummaryCurveFeature.h
 )
 
 set (SOURCE_GROUP_SOURCE_FILES
 ${CEE_CURRENT_LIST_DIR}RicCreateGraphPlotMainWindowFeature.cpp
 ${CEE_CURRENT_LIST_DIR}RicDropEnabledMainWindow.cpp
 ${CEE_CURRENT_LIST_DIR}RicDeleteSummaryPlotFeature.cpp
+${CEE_CURRENT_LIST_DIR}RicAddSummaryCurveFeature.cpp
 )
 
 list(APPEND CODE_HEADER_FILES

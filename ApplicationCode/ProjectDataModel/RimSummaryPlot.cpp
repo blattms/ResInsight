@@ -83,3 +83,31 @@ RiuResultQwtPlot* RimSummaryPlot::qwtPlot()
 {
     return m_qwtPlot;
 }
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimSummaryPlot::redrawAllCurves()
+{
+    m_qwtPlot->deleteAllCurves();
+
+    RifReaderEclipseSummary* reader = summaryReader();
+    std::vector<time_t> timeSteps = reader->timeSteps();
+
+    std::vector<double> values;
+    std::string keyword = m_variableName().toStdString();
+    reader->values(keyword, &values);
+
+    std::vector<QDateTime> dateTimes;
+    {
+        std::vector<time_t> times = reader->timeSteps();
+        dateTimes = RifReaderEclipseSummary::fromTimeT(times);
+    }
+
+    for (auto curve : summaryCurves)
+    {
+
+        m_qwtPlot->
+    }
+
+}

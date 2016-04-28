@@ -760,7 +760,7 @@ RimSummaryPlotCollection* RimProject::graphPlotCollection()
     if (!m_graphPlotCollection)
     {
         m_graphPlotCollection = new RimSummaryPlotCollection;
-        m_graphPlotCollection->updateConnectedEditors();
+        this->updateConnectedEditors();
     }
 
     return m_graphPlotCollection;
