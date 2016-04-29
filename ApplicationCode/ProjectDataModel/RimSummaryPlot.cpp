@@ -17,9 +17,12 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 #include "RimSummaryPlot.h"
+
 #include "RimSummaryCurve.h"
-#include "RiuResultQwtPlot.h"
 #include "RimSummaryPlotCollection.h"
+
+#include "RiuResultQwtPlot.h"
+#include "RiuSelectionColors.h"
 
 #include "cvfBase.h"
 #include "cvfColor3.h"
@@ -106,6 +109,8 @@ void RimSummaryPlot::redrawAllCurves()
 
         curve->curveData(&dateTimes, &values);
 
-        m_qwtPlot->addCurve(curve->m_variableName(), cvf::Color3::BLUE, dateTimes, values);
+        cvf::Color3f curveColor = RiuSelectionColors::curveColorFromTable();
+
+        m_qwtPlot->addCurve(curve->m_variableName(), curveColor, dateTimes, values);
     }
 }
