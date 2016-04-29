@@ -82,7 +82,7 @@ void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
 void RicCreateGraphPlotMainWindowFeature::setupActionLook(QAction* actionToSetup)
 {
     //actionToSetup->setIcon(QIcon(":/CrossSection16x16.png"));
-    actionToSetup->setText("New Graph Mainwindow");
+    actionToSetup->setText("Show Summary Plots");
 }
 
 //--------------------------------------------------------------------------------------------------
