@@ -78,7 +78,7 @@ void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
 
                 for (size_t i = 0; i < allVariableNames.size(); i++)
                 {
-                    if (i % 10 == 0)
+                    if (i % 2 == 0)
                     {
                         graphPlot = graphPlotCollection->createAppendPlot("My Plot");
                     }

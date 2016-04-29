@@ -307,3 +307,11 @@ void RimSummaryPlotCollection::redrawAllPlots()
         m_graphPlots[i]->redrawAllCurves();
     }
 }
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+QMainWindow* RimSummaryPlotCollection::windowWithGraphPlots()
+{
+    return m_plotMainWindow;
+}

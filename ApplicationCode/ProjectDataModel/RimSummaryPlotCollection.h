@@ -58,6 +58,8 @@ public:
     virtual void                                        fieldChangedByUi(const caf::PdmFieldHandle* changedField, const QVariant& oldValue, const QVariant& newValue);
     virtual void                                        initAfterRead();
 
+    QMainWindow*            windowWithGraphPlots();
+
 private:
     caf::PdmChildArrayField<RimSummaryPlot*> m_graphPlots;
 

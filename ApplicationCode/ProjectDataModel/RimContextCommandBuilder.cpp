@@ -289,6 +289,10 @@ QStringList RimContextCommandBuilder::commandsFromSelection()
         {
             commandIds << "RicAddSummaryCurveFeature";
         }
+        else if (dynamic_cast<RimSummaryPlotCollection*>(uiItem))
+        {
+            commandIds << "RicTileGraphWindowsFeature";
+        }
 
         if (dynamic_cast<RimView*>(uiItem))
         {
