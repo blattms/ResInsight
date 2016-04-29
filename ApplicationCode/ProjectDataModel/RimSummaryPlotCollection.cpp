@@ -40,7 +40,7 @@ CAF_PDM_SOURCE_INIT(RimSummaryPlotCollection, "RimGraphPlotCollection");
 //--------------------------------------------------------------------------------------------------
 RimSummaryPlotCollection::RimSummaryPlotCollection()
 {
-    CAF_PDM_InitObject("Graph Plots", "", "", "");
+    CAF_PDM_InitObject("Graphs", "", "", "");
 
     CAF_PDM_InitField(&showWindow, "ShowWindow", true, "Show 2D Plot windows", "", "", "");
     showWindow.uiCapability()->setUiHidden(true);

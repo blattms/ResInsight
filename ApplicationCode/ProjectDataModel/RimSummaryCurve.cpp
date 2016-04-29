@@ -38,7 +38,7 @@ CAF_PDM_SOURCE_INIT(RimSummaryCurve, "SummaryCurve");
 //--------------------------------------------------------------------------------------------------
 RimSummaryCurve::RimSummaryCurve()
 {
-    CAF_PDM_InitObject("RimSummaryCurve", "", "", "");
+    CAF_PDM_InitObject("Summary Curve", ":/WellLogCurve16x16.png", "", "");
 
     CAF_PDM_InitFieldNoDefault(&m_eclipseCase, "ReferencedEclipseCase", "Eclipse Case", "", "", "");
     m_eclipseCase.uiCapability()->setUiChildrenHidden(true);
@@ -73,8 +73,10 @@ QList<caf::PdmOptionItemInfo> RimSummaryCurve::calculateValueOptions(const caf::
             {
                 std::vector<std::string> varNames = reader->variableNames();
 
-                for (auto name : varNames)
+                for (size_t i = 0; i < varNames.size(); i++)
                 {
+                    std::string name = varNames[i];
+
                     QString s = QString::fromStdString(name);
                     optionList.push_back(caf::PdmOptionItemInfo(s, s));
                 }
@@ -92,8 +94,10 @@ QList<caf::PdmOptionItemInfo> RimSummaryCurve::calculateValueOptions(const caf::
 
         proj->allCases(cases);
 
-        for (auto rimCase : cases)
+        for (size_t i = 0; i < cases.size(); i++)
         {
+            RimCase* rimCase = cases[i];
+
             optionList.push_back(caf::PdmOptionItemInfo(rimCase->caseUserDescription(), QVariant::fromValue(caf::PdmPointer<caf::PdmObjectHandle>(rimCase))));
         }
 

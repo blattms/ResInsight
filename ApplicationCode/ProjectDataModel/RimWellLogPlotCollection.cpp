@@ -42,7 +42,7 @@ RimWellLogPlotCollection::RimWellLogPlotCollection()
 {
     CAF_PDM_InitObject("Well Log Plots", ":/WellLogPlots16x16.png", "", "");
 
-    CAF_PDM_InitFieldNoDefault(&wellLogPlots, "WellLogPlots", "",  "", "", "");
+    CAF_PDM_InitFieldNoDefault(&wellLogPlots, "WellLogPlots", ":/WellLogPlot16x16.png",  "", "", "");
     wellLogPlots.uiCapability()->setUiHidden(true);
 }
 

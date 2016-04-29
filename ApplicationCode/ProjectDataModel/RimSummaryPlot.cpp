@@ -37,7 +37,7 @@ CAF_PDM_SOURCE_INIT(RimSummaryPlot, "GraphPlot");
 //--------------------------------------------------------------------------------------------------
 RimSummaryPlot::RimSummaryPlot()
 {
-    CAF_PDM_InitObject("Graph Plot", "", "", "");
+    CAF_PDM_InitObject("Graph", ":/WellLogPlot16x16.png", "", "");
 
     CAF_PDM_InitFieldNoDefault(&summaryCurves, "SummaryCurves", "",  "", "", "");
     summaryCurves.uiCapability()->setUiHidden(true);
