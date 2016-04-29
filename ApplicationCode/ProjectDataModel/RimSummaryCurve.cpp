@@ -118,22 +118,7 @@ void RimSummaryCurve::fieldChangedByUi(const caf::PdmFieldHandle* changedField, 
         this->firstAnchestorOrThisOfType(summaryPlot);
         if (summaryPlot)
         {
-            summaryPlot->qwtPlot()->deleteAllCurves();
-
-            RifReaderEclipseSummary* reader = summaryReader();
-            std::vector<time_t> timeSteps = reader->timeSteps();
-
-            std::vector<double> values;
-            std::string keyword = m_variableName().toStdString();
-            reader->values(keyword, &values);
-
-            std::vector<QDateTime> dateTimes;
-            {
-                std::vector<time_t> times = reader->timeSteps();
-                dateTimes = RifReaderEclipseSummary::fromTimeT(times);
-            }
-
-            summaryPlot->qwtPlot()->addCurve(m_variableName(), cvf::Color3::BLUE, dateTimes, values);
+            summaryPlot->redrawAllCurves();
         }
     }
 }
@@ -146,12 +131,7 @@ RifReaderEclipseSummary* RimSummaryCurve::summaryReader()
     RimSummaryPlotCollection* plotCollection = NULL;
     this->firstAnchestorOrThisOfType(plotCollection);
 
-    QString caseName = m_eclipseCase->gridFileName();
-    QString caseNameWithNoExtension = caseName.remove(".egrid", Qt::CaseInsensitive);
-
-    QString msjTest = caseNameWithNoExtension.replace("/", "\\");
-    
-    return plotCollection->fileReader(msjTest);
+    return plotCollection->getOrCreateSummaryFileReader(m_eclipseCase);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,4 +142,24 @@ void RimSummaryCurve::defineUiTreeOrdering(caf::PdmUiTreeOrdering& uiTreeOrderin
     // TODO: Used to hide the entry for a case in the tree view as we have no
     // setUiTreeHidden(true)
     uiTreeOrdering.setForgetRemainingFields(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimSummaryCurve::curveData(std::vector<QDateTime>* timeSteps, std::vector<double>* values)
+{
+    RifReaderEclipseSummary* reader = summaryReader();
+
+    if (timeSteps)
+    {
+        std::vector<time_t> times = reader->timeSteps();
+        *timeSteps = RifReaderEclipseSummary::fromTimeT(times);
+    }
+
+    if (values)
+    {
+        std::string keyword = m_variableName().toStdString();
+        reader->values(keyword, values);
+    }
 }

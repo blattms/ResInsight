@@ -18,11 +18,15 @@
 
 #include "RimSummaryPlotCollection.h"
 
-#include "RimSummaryPlot.h"
 #include "GraphPlotCommands/RicDropEnabledMainWindow.h"
+
 #include "RifEclipseSummaryTools.h"
 #include "RifReaderEclipseSummary.h"
-#include "QDockWidget"
+
+#include "RimEclipseResultCase.h"
+#include "RimSummaryPlot.h"
+
+#include <QDockWidget>
 
 
 CAF_PDM_SOURCE_INIT(RimSummaryPlotCollection, "RimGraphPlotCollection");
@@ -78,7 +82,7 @@ void RimSummaryPlotCollection::showPlotWindow()
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RifReaderEclipseSummary* RimSummaryPlotCollection::fileReader(const QString& eclipseCase)
+RifReaderEclipseSummary* RimSummaryPlotCollection::getOrCreateSummaryFileReader(const QString& eclipseCase)
 {
     auto it = m_summaryFileReaders.find(eclipseCase);
     if (it != m_summaryFileReaders.end())
@@ -87,14 +91,29 @@ RifReaderEclipseSummary* RimSummaryPlotCollection::fileReader(const QString& ecl
     }
     else
     {
-        return createReader(eclipseCase);
+        return createSummaryFileReader(eclipseCase);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RifReaderEclipseSummary* RimSummaryPlotCollection::createReader(const QString& eclipseCase)
+RifReaderEclipseSummary* RimSummaryPlotCollection::getOrCreateSummaryFileReader(const RimEclipseResultCase* eclipseCase)
+{
+    if (!eclipseCase) return NULL;
+
+    QString caseName = eclipseCase->gridFileName();
+    QString caseNameWithNoExtension = caseName.remove(".egrid", Qt::CaseInsensitive);
+
+    QString caseNameAbsPath = caseNameWithNoExtension.replace("/", "\\");
+
+    return this->getOrCreateSummaryFileReader(caseNameAbsPath);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+RifReaderEclipseSummary* RimSummaryPlotCollection::createSummaryFileReader(const QString& eclipseCase)
 {
     std::string headerFile;
     bool isFormatted = false;

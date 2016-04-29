@@ -19,6 +19,12 @@
 #include "RimSummaryPlot.h"
 #include "RimSummaryCurve.h"
 #include "RiuResultQwtPlot.h"
+#include "RimSummaryPlotCollection.h"
+
+#include "cvfBase.h"
+#include "cvfColor3.h"
+
+#include <QDateTime>
 
 
 CAF_PDM_SOURCE_INIT(RimSummaryPlot, "GraphPlot");
@@ -91,23 +97,15 @@ void RimSummaryPlot::redrawAllCurves()
 {
     m_qwtPlot->deleteAllCurves();
 
-    RifReaderEclipseSummary* reader = summaryReader();
-    std::vector<time_t> timeSteps = reader->timeSteps();
-
-    std::vector<double> values;
-    std::string keyword = m_variableName().toStdString();
-    reader->values(keyword, &values);
-
-    std::vector<QDateTime> dateTimes;
+    for (size_t i = 0; i < summaryCurves.size(); i++)
     {
-        std::vector<time_t> times = reader->timeSteps();
-        dateTimes = RifReaderEclipseSummary::fromTimeT(times);
+        RimSummaryCurve* curve = summaryCurves[i];
+
+        std::vector<QDateTime> dateTimes;
+        std::vector<double> values;
+
+        curve->curveData(&dateTimes, &values);
+
+        m_qwtPlot->addCurve(curve->m_variableName(), cvf::Color3::BLUE, dateTimes, values);
     }
-
-    for (auto curve : summaryCurves)
-    {
-
-        m_qwtPlot->
-    }
-
 }

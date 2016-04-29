@@ -45,6 +45,7 @@ public:
 
     virtual QList<caf::PdmOptionItemInfo> calculateValueOptions(const caf::PdmFieldHandle* fieldNeedingOptions, bool* useOptionsOnly);
 
+    void curveData(std::vector<QDateTime>* timeSteps, std::vector<double>* values);
 
 private:
     RifReaderEclipseSummary* summaryReader();
