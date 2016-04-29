@@ -44,6 +44,8 @@ public:
     void showPlotWindow();
     void hidePlotWindow();
 
+    void redrawAllPlots();
+
     RifReaderEclipseSummary* getOrCreateSummaryFileReader(const RimEclipseResultCase* eclipseCase);
 
     void createDockWindowsForAllPlots();
@@ -64,10 +66,11 @@ private:
     RifReaderEclipseSummary* getOrCreateSummaryFileReader(const QString& eclipseCase);
 
     QDockWidget* dockWidgetFromPlot(RimSummaryPlot* graphPlot);
-    void createDockWidget(RimSummaryPlot* graphPlot);
+    void createPlotDockWidget(RimSummaryPlot* graphPlot);
     void eraseDockWidget(RimSummaryPlot* graphPlot);
 
 private:
+    QMainWindow*              m_plotManagerMainWindow;
     RicDropEnabledMainWindow* m_plotMainWindow;
 
     std::vector<QPointer<QDockWidget> > additionalProjectViews;

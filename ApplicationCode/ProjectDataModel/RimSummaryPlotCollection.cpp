@@ -25,8 +25,12 @@
 
 #include "RimEclipseResultCase.h"
 #include "RimSummaryPlot.h"
+#include "RimProject.h"
+
+#include "RiuProjectPropertyView.h"
 
 #include <QDockWidget>
+#include "RiuMainWindow.h"
 
 
 CAF_PDM_SOURCE_INIT(RimSummaryPlotCollection, "RimGraphPlotCollection");
@@ -45,6 +49,7 @@ RimSummaryPlotCollection::RimSummaryPlotCollection()
     m_graphPlots.uiCapability()->setUiHidden(true);
 
     m_plotMainWindow = NULL;
+    m_plotManagerMainWindow = NULL;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,8 +59,8 @@ RimSummaryPlotCollection::~RimSummaryPlotCollection()
 {
     m_graphPlots.deleteAllChildObjects();
 
-    m_plotMainWindow->close();
-    m_plotMainWindow->deleteLater();
+    m_plotManagerMainWindow->close();
+    m_plotManagerMainWindow->deleteLater();
 
     for (auto it = m_summaryFileReaders.begin(); it != m_summaryFileReaders.end(); it++)
     {
@@ -69,14 +74,40 @@ RimSummaryPlotCollection::~RimSummaryPlotCollection()
 //--------------------------------------------------------------------------------------------------
 void RimSummaryPlotCollection::showPlotWindow()
 {
-    if (!m_plotMainWindow)
+    if (!m_plotManagerMainWindow)
     {
+        m_plotManagerMainWindow = new QMainWindow;
+        m_plotManagerMainWindow->setDockNestingEnabled(true);
+
         m_plotMainWindow = new RicDropEnabledMainWindow;
         m_plotMainWindow->setDockNestingEnabled(true);
+
+        // NOTE! setCentralWidget takes ownership of widget
+        m_plotManagerMainWindow->setCentralWidget(m_plotMainWindow);
+
+        {
+            QDockWidget* dockWidget = new QDockWidget("Plots", m_plotManagerMainWindow);
+            dockWidget->setObjectName("dockWidget");
+
+            RiuMainWindow* mainWindow = RiuMainWindow::instance();
+
+            RiuProjectAndPropertyView* projPropView = new RiuProjectAndPropertyView(mainWindow, dockWidget);
+            dockWidget->setWidget(projPropView);
+
+            RimProject* proj = NULL;
+            this->firstAnchestorOrThisOfType(proj);
+
+            projPropView->setPdmItem(proj);
+            projPropView->setUiConfigurationName("PlotsTreeView");
+
+            m_plotManagerMainWindow->addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
+        }
     }
 
-    m_plotMainWindow->showNormal();
-    m_plotMainWindow->raise();
+    m_plotMainWindow->show();
+
+    m_plotManagerMainWindow->showNormal();
+    m_plotManagerMainWindow->raise();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,7 +175,7 @@ void RimSummaryPlotCollection::createDockWindowsForAllPlots()
     {
         if (!dockWidgetFromPlot(m_graphPlots[i]))
         {
-            createDockWidget(m_graphPlots[i]);
+            createPlotDockWidget(m_graphPlots[i]);
         }
     }
 }
@@ -168,7 +199,7 @@ QDockWidget* RimSummaryPlotCollection::dockWidgetFromPlot(RimSummaryPlot* graphP
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-void RimSummaryPlotCollection::createDockWidget(RimSummaryPlot* graphPlot)
+void RimSummaryPlotCollection::createPlotDockWidget(RimSummaryPlot* graphPlot)
 {
     assert(m_plotMainWindow != NULL);
 
@@ -227,9 +258,9 @@ RimSummaryPlot* RimSummaryPlotCollection::createAppendPlot(const QString& name)
 //--------------------------------------------------------------------------------------------------
 void RimSummaryPlotCollection::hidePlotWindow()
 {
-    if (m_plotMainWindow)
+    if (m_plotManagerMainWindow)
     {
-        m_plotMainWindow->hide();
+        m_plotManagerMainWindow->hide();
     }
 }
 
@@ -263,5 +294,16 @@ void RimSummaryPlotCollection::initAfterRead()
     else
     {
         hidePlotWindow();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// 
+//--------------------------------------------------------------------------------------------------
+void RimSummaryPlotCollection::redrawAllPlots()
+{
+    for (size_t i = 0; i < m_graphPlots.size(); i++)
+    {
+        m_graphPlots[i]->redrawAllCurves();
     }
 }

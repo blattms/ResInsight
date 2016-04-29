@@ -33,7 +33,7 @@
 //--------------------------------------------------------------------------------------------------
 /// 
 //--------------------------------------------------------------------------------------------------
-RiuProjectAndPropertyView::RiuProjectAndPropertyView(QMainWindow* mainWindow, QWidget* parent, Qt::WindowFlags f)
+RiuProjectAndPropertyView::RiuProjectAndPropertyView(QMainWindow* receiverOfCustomMenuEvents, QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     // Tree View
@@ -53,7 +53,7 @@ RiuProjectAndPropertyView::RiuProjectAndPropertyView(QMainWindow* mainWindow, QW
     m_projectTreeView->treeView()->setDragDropMode(QAbstractItemView::DragDrop);
 
     m_projectTreeView->treeView()->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_projectTreeView->treeView(), SIGNAL(customContextMenuRequested(const QPoint&)), mainWindow, SLOT(customMenuRequested(const QPoint&)));
+    connect(m_projectTreeView->treeView(), SIGNAL(customContextMenuRequested(const QPoint&)), receiverOfCustomMenuEvents, SLOT(customMenuRequested(const QPoint&)));
 
     // Property view
     m_propertyView = new caf::PdmUiPropertyView;
