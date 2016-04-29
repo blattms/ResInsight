@@ -20,13 +20,17 @@
 
 #include "RiaApplication.h"
 
+
 #include "RicDropEnabledMainWindow.h"
 
+#include "RifReaderEclipseSummary.h"
+
 #include "RimEclipseResultCase.h"
-#include "RimSummaryPlot.h"
-#include "RimSummaryPlotCollection.h"
 #include "RimProject.h"
 #include "RimSummaryCurve.h"
+#include "RimSummaryPlot.h"
+#include "RimSummaryPlotCollection.h"
+
 #include "RiuResultQwtPlot.h"
 
 #include "cafSelectionManager.h"
@@ -58,20 +62,38 @@ void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
     RimProject* proj = RiaApplication::instance()->project();
     if (proj)
     {
+        RimEclipseResultCase* eclipseResultCase = dynamic_cast<RimEclipseResultCase*>(caf::SelectionManager::instance()->selectedItem());
+        
         RimSummaryPlotCollection* graphPlotCollection = proj->graphPlotCollection();
         graphPlotCollection->showPlotWindow();
 
-        RimEclipseResultCase* destinationObject = dynamic_cast<RimEclipseResultCase*>(caf::SelectionManager::instance()->selectedItem());
-        if (destinationObject)
+        if (eclipseResultCase)
         {
-            RimSummaryPlot* graphPlot = graphPlotCollection->createAppendPlot("My Plot");
-            RimSummaryCurve* summaryCurve = new RimSummaryCurve;
-            summaryCurve->m_eclipseCase = destinationObject;
+            RifReaderEclipseSummary* eclipseSummaryReader = graphPlotCollection->getOrCreateSummaryFileReader(eclipseResultCase);
+            if (eclipseSummaryReader)
+            {
+                std::vector<std::string> allVariableNames = eclipseSummaryReader->variableNames();
 
-            graphPlot->summaryCurves.push_back(summaryCurve);
-            graphPlotCollection->updateConnectedEditors();
+                RimSummaryPlot* graphPlot = NULL;
 
-            graphPlotCollection->createDockWindowsForAllPlots();
+                for (size_t i = 0; i < allVariableNames.size(); i++)
+                {
+                    if (i % 10 == 0)
+                    {
+                        graphPlot = graphPlotCollection->createAppendPlot("My Plot");
+                    }
+
+                    RimSummaryCurve* summaryCurve = new RimSummaryCurve;
+                    summaryCurve->m_eclipseCase = eclipseResultCase;
+                    summaryCurve->m_variableName = QString::fromStdString(allVariableNames[i]);
+
+                    graphPlot->summaryCurves.push_back(summaryCurve);
+                }
+
+                graphPlotCollection->updateConnectedEditors();
+                graphPlotCollection->createDockWindowsForAllPlots();
+                graphPlotCollection->redrawAllPlots();
+            }
         }
     }
 }
