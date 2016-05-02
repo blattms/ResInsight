@@ -1,0 +1,29 @@
+@startuml
+
+class RimView {
+  QString name
+  bool    isVisible
+}
+
+class Rim3dView {
+}
+
+class RimPlotView {
+maybe better name is Rim2dPlotView
+}
+
+
+RimView <|-- RimPlotView
+RimView <|-- Rim3dView
+
+
+RimPlotView -> RimDockWidgetGeometry
+Rim3dView -> RimMdiWidgetGeometry
+
+RimPlotView <|-- RimWellLogPlot
+RimPlotView <|-- RimSummaryPlot
+
+Rim3dView <|-- RimEclipseView
+Rim3dView <|-- RimGeoMechView
+
+@enduml
