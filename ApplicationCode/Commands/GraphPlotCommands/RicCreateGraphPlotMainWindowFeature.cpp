@@ -76,7 +76,7 @@ void RicCreateGraphPlotMainWindowFeature::onActionTriggered(bool isChecked)
 
                 RimSummaryPlot* graphPlot = NULL;
 
-                for (size_t i = 0; i < allVariableNames.size(); i++)
+                for (size_t i = 0; i < 5; i++)
                 {
                     if (i % 2 == 0)
                     {
