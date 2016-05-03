@@ -1,15 +1,13 @@
 @startuml
 
 class RimView {
-  QString name
-  bool    isVisible
+  RimViewGeometry* viewGeometry()
 }
 
 class Rim3dView {
 }
 
 class RimPlotView {
-maybe better name is Rim2dPlotView
 }
 
 
@@ -17,13 +15,21 @@ RimView <|-- RimPlotView
 RimView <|-- Rim3dView
 
 
-RimPlotView -> RimDockWidgetGeometry
-Rim3dView -> RimMdiWidgetGeometry
+RimView *-- RimViewGeometry
 
 RimPlotView <|-- RimWellLogPlot
 RimPlotView <|-- RimSummaryPlot
 
 Rim3dView <|-- RimEclipseView
 Rim3dView <|-- RimGeoMechView
+
+class RimWindow {
+}
+
+RimViewGeometry --> RimWindow
+
+class RimViewGeometry {
+  PtrField<RimWindow> window
+}
 
 @enduml
