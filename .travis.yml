@@ -12,7 +12,7 @@ addons:
       - boost-latest
       - ubuntu-toolchain-r-test
     packages:
-      - libboost1.55-all-dev
+      - libboost1.58-all-dev
       - gcc-4.9
       - g++-4.9
       
