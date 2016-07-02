@@ -12,7 +12,7 @@ addons:
       - boost-latest
       - ubuntu-toolchain-r-test
     packages:
-      - libboost1.60-all-dev
+      - libboost1.55-all-dev
       - gcc-4.9
       - g++-4.9
       
@@ -23,7 +23,8 @@ before_script:
 script:
   - mkdir build
   - cd build
-  - cmake .. && make -j2
+  - cmake -DBOOST_NO_CXX11_SCOPED_ENUMS
+  - make -j2
 
 
 
