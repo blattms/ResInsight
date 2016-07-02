@@ -4,7 +4,7 @@ compiler:
   - gcc
   
 # switch to Ubuntu 14.04 aka the newest one possible (while 16.04 is out...)
-dist: trusty
+#dist: trusty
 
 addons:
   apt:
