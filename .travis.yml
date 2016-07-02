@@ -2,6 +2,9 @@ language: cpp
 
 compiler:
   - gcc
+  
+# switch to Ubuntu 14.04 aka the newest one possible (while 16.04 is out...)
+dist: trusty
 
 addons:
   apt:
@@ -10,11 +13,11 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - libboost1.55-all-dev
-      - gcc-4.8
-      - g++-4.8
+      - gcc-4.9
+      - g++-4.9
       
 before_script:
-    - export CXX="g++-4.8" CC="gcc-4.8" 
+    - export CXX="g++-4.9" CC="gcc-4.9" 
     - git clone https://github.com/OPM/ResInsight.git
     
 script:
