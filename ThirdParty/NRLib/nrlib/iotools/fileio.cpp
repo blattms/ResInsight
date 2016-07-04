@@ -174,7 +174,7 @@ void NRLib::CopyFile(const std::string & from_path,
       throw IOError("Failed to open " + to_path + " for writing: The file already exists.");
   }
 
-  boost::filesystem::copy_file(from_path, to_path);
+  //boost::filesystem::copy_file(from_path, to_path);
 }
 
 
