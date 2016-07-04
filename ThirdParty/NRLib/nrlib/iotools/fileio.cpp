@@ -72,7 +72,7 @@ void NRLib::OpenRead(std::ifstream&          stream,
 
 void NRLib::OpenRead(std::fstream&          stream,
                      const std::string&      filename,
-                     std::ios_base::opecopnmode mode)
+                     std::ios_base::openmode mode)
 {
   namespace fs = boost::filesystem;
 
