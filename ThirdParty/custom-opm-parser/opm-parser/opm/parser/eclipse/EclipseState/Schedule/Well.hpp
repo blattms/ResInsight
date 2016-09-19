@@ -28,6 +28,7 @@
 #include <opm/parser/eclipse/EclipseState/Schedule/WellInjectionProperties.hpp>
 #include <opm/parser/eclipse/EclipseState/Schedule/WellPolymerProperties.hpp>
 #include <opm/parser/eclipse/EclipseState/Schedule/WellProductionProperties.hpp>
+#include <opm/parser/eclipse/EclipseState/Schedule/WellEconProductionLimits.hpp>
 #include <opm/parser/eclipse/EclipseState/Util/Value.hpp>
 #include <opm/parser/eclipse/Parser/MessageContainer.hpp>
 
@@ -44,8 +45,11 @@ namespace Opm {
 
     class Well {
     public:
-        Well(const std::string& name, std::shared_ptr<const EclipseGrid> grid , int headI, int headJ, Value<double> refDepth , Phase::PhaseEnum preferredPhase,
-             std::shared_ptr< const TimeMap > timeMap, size_t creationTimeStep, WellCompletion::CompletionOrderEnum completionOrdering = WellCompletion::TRACK, bool allowCrossFlow = true);
+        Well(const std::string& name, std::shared_ptr<const EclipseGrid> grid, int headI,
+             int headJ, Value<double> refDepth , Phase::PhaseEnum preferredPhase,
+             std::shared_ptr< const TimeMap > timeMap, size_t creationTimeStep,
+             WellCompletion::CompletionOrderEnum completionOrdering = WellCompletion::TRACK,
+             bool allowCrossFlow = true, bool automaticShutIn = true);
         const std::string& name() const;
 
         bool hasBeenDefined(size_t timeStep) const;
@@ -79,6 +83,17 @@ namespace Opm {
         void addCompletionSet(size_t time_step, const std::shared_ptr< const CompletionSet > newCompletionSet);
         std::shared_ptr< const CompletionSet > getCompletions(size_t timeStep) const;
 
+        /* The rate of a given phase under the following assumptions:
+         * * Returns zero if production is requested for an injector (and vice
+         *   versa)
+         * * If this is an injector and something else than the
+         *   requested phase is injected, returns 0, i.e.
+         *   water_injector.injection_rate( gas ) == 0
+         * * Mixed injection is not supported and always returns 0.
+         */
+        double production_rate( Phase::PhaseEnum phase, size_t timestep ) const;
+        double injection_rate( Phase::PhaseEnum phase, size_t timestep ) const;
+
         bool                            setProductionProperties(size_t timeStep , const WellProductionProperties properties);
         WellProductionProperties        getProductionPropertiesCopy(size_t timeStep) const;
         const WellProductionProperties& getProductionProperties(size_t timeStep)  const;
@@ -94,6 +109,9 @@ namespace Opm {
         bool                           setSolventFraction(size_t timeStep , const double fraction);
         const double&                  getSolventFraction(size_t timeStep) const;
 
+        bool                            setEconProductionLimits(const size_t timeStep, const WellEconProductionLimits& productionlimits);
+        const WellEconProductionLimits& getEconProductionLimits(const size_t timeStep) const;
+
         int  firstRFTOutput( ) const;
         bool getRFTActive(size_t time_step) const;
         void setRFTActive(size_t time_step, bool value);
@@ -107,6 +125,7 @@ namespace Opm {
         WellCompletion::CompletionOrderEnum getWellCompletionOrdering() const;
 
         bool getAllowCrossFlow() const;
+        bool getAutomaticShutIn() const;
         bool canOpen(size_t time_step) const;
 
 
@@ -134,6 +153,7 @@ namespace Opm {
         std::shared_ptr<DynamicState<WellProductionProperties> > m_productionProperties;
         std::shared_ptr<DynamicState<WellInjectionProperties> > m_injectionProperties;
         std::shared_ptr<DynamicState<WellPolymerProperties> > m_polymerProperties;
+        std::shared_ptr<DynamicState<WellEconProductionLimits> > m_econproductionlimits;
         std::shared_ptr<DynamicState<double> > m_solventFraction;
         std::shared_ptr<DynamicState<std::string> > m_groupName;
         std::shared_ptr<DynamicState<bool> > m_rft;
@@ -150,13 +170,12 @@ namespace Opm {
 
         WellCompletion::CompletionOrderEnum m_comporder;
         bool m_allowCrossFlow;
+        bool m_automaticShutIn;
         MessageContainer m_messages;
         // WELSEGS DATA - for mutli-segment wells
         // flag indicating if the well is a multi-segment well
         std::shared_ptr<DynamicState<std::shared_ptr< const SegmentSet >>> m_segmentset;
     };
-    typedef std::shared_ptr<Well> WellPtr;
-    typedef std::shared_ptr<const Well> WellConstPtr;
 }
 
 

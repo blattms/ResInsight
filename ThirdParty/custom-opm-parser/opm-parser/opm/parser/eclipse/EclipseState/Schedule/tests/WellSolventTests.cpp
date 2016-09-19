@@ -19,10 +19,8 @@
 
 #define BOOST_TEST_MODULE WellSolventTests
 
-#include <opm/common/utility/platform_dependent/disable_warnings.h>
 #include <boost/filesystem.hpp>
 #include <boost/test/unit_test.hpp>
-#include <opm/common/utility/platform_dependent/reenable_warnings.h>
 
 #include <opm/parser/eclipse/EclipseState/Grid/EclipseGrid.hpp>
 #include <opm/parser/eclipse/EclipseState/Schedule/Schedule.hpp>
@@ -163,7 +161,7 @@ BOOST_AUTO_TEST_CASE(TestDynamicWSOLVENT) {
     BOOST_CHECK_EQUAL(keyword.size(),1);
     const auto& record = keyword.getRecord(0);
     const std::string& wellNamesPattern = record.getItem("WELL").getTrimmedString(0);
-    std::vector<WellPtr> wells_solvent = schedule.getWells(wellNamesPattern);
+    auto wells_solvent = schedule.getWellsMatching(wellNamesPattern);
     BOOST_CHECK_EQUAL(wellNamesPattern, "W_1");
     BOOST_CHECK_EQUAL(wells_solvent[0]->getSolventFraction(0),0); //default 0
     BOOST_CHECK_EQUAL(wells_solvent[0]->getSolventFraction(1),1);

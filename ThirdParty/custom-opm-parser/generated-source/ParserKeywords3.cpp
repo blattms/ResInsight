@@ -12,8 +12,8 @@ namespace Opm {
 namespace ParserKeywords {
 
 
+void addDefaultKeywords3(Parser& p);
 void addDefaultKeywords3(Parser& p) {
-p.addKeyword< ParserKeywords::SSOL >();
 p.addKeyword< ParserKeywords::START >();
 p.addKeyword< ParserKeywords::STCOND >();
 p.addKeyword< ParserKeywords::STONE1 >();
@@ -38,6 +38,7 @@ p.addKeyword< ParserKeywords::THPRES >();
 p.addKeyword< ParserKeywords::TITLE >();
 p.addKeyword< ParserKeywords::TLMIXPAR >();
 p.addKeyword< ParserKeywords::TLPMIXPA >();
+p.addKeyword< ParserKeywords::TNUM >();
 p.addKeyword< ParserKeywords::TOPS >();
 p.addKeyword< ParserKeywords::TRACER >();
 p.addKeyword< ParserKeywords::TRACERS >();
@@ -68,6 +69,8 @@ p.addKeyword< ParserKeywords::WCONINJ >();
 p.addKeyword< ParserKeywords::WCONINJE >();
 p.addKeyword< ParserKeywords::WCONINJH >();
 p.addKeyword< ParserKeywords::WCONPROD >();
+p.addKeyword< ParserKeywords::WDRILTIM >();
+p.addKeyword< ParserKeywords::WECON >();
 p.addKeyword< ParserKeywords::WELLDIMS >();
 p.addKeyword< ParserKeywords::WELL_PROBE >();
 p.addKeyword< ParserKeywords::WELOPEN >();
@@ -76,6 +79,7 @@ p.addKeyword< ParserKeywords::WELSPECS >();
 p.addKeyword< ParserKeywords::WELTARG >();
 p.addKeyword< ParserKeywords::WGRUPCON >();
 p.addKeyword< ParserKeywords::WHISTCTL >();
+p.addKeyword< ParserKeywords::WLIFT >();
 p.addKeyword< ParserKeywords::WPAVE >();
 p.addKeyword< ParserKeywords::WPIMULT >();
 p.addKeyword< ParserKeywords::WPITAB >();
