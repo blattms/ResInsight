@@ -65,16 +65,9 @@ void RifReaderOpmParserInput::importGridPropertiesFaults(const QString& fileName
             {
                 eclipseGrid = Opm::Parser::parseGrid(*deck, parseContext);
 
-                if (eclipseGrid && eclipseGrid->hasCellInfo())
+                if (eclipseGrid && eclipseGrid->c_ptr())
                 {
-                    if (eclipseGrid->c_ptr())
-                    {
-                        RifReaderEclipseOutput::transferGeometry(eclipseGrid->c_ptr(), caseData);
-                    }
-                    else
-                    {
-                        throw std::invalid_argument("No valid 3D grid detected");
-                    }
+                    RifReaderEclipseOutput::transferGeometry(eclipseGrid->c_ptr(), caseData);
 
                     Opm::TableManager tableManager(*deck);
 
@@ -147,6 +140,10 @@ void RifReaderOpmParserInput::importGridPropertiesFaults(const QString& fileName
                             caseData->mainGrid()->setFaults(faults);
                         }
                     }
+                }
+                else
+                {
+                    throw std::invalid_argument("No valid 3D grid detected");
                 }
             }
         }

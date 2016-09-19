@@ -167,8 +167,8 @@ else()
         set(ERT_INCLUDE_ROOT "${RESINSIGHT_ERT_EXTERNAL_SOURCE_ROOT}")
         add_subdirectory(${ERT_SOURCE_PATH} ${CMAKE_BINARY_DIR}/ThirdParty/Ert)
     else()
-        set(ERT_INCLUDE_ROOT ${CMAKE_SOURCE_DIR}/ThirdParty/Ert/devel)
-        add_subdirectory(ThirdParty/Ert/devel)
+        set(ERT_INCLUDE_ROOT ${CMAKE_SOURCE_DIR}/ThirdParty/Ert)
+        add_subdirectory(ThirdParty/Ert)
     endif ()
 
     list(APPEND ERT_INCLUDE_DIRS
@@ -211,7 +211,7 @@ endif(RESINSIGHT_ERT_EXTERNAL_LIB_ROOT OR RESINSIGHT_ERT_EXTERNAL_INCLUDE_ROOT)
 add_subdirectory(ThirdParty/custom-opm-parser)
 add_subdirectory(ThirdParty/custom-opm-parser/custom-opm-parser-tests)
 add_subdirectory(ThirdParty/custom-opm-flowdiagnostics)
-
+#add_subdirectory(ThirdParty/custom-opm-flowdiagnostics-applications)
 
 ################################################################################
 # NRLib
