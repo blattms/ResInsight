@@ -211,7 +211,7 @@ endif(RESINSIGHT_ERT_EXTERNAL_LIB_ROOT OR RESINSIGHT_ERT_EXTERNAL_INCLUDE_ROOT)
 add_subdirectory(ThirdParty/custom-opm-parser)
 add_subdirectory(ThirdParty/custom-opm-parser/custom-opm-parser-tests)
 add_subdirectory(ThirdParty/custom-opm-flowdiagnostics)
-#add_subdirectory(ThirdParty/custom-opm-flowdiagnostics-applications)
+add_subdirectory(ThirdParty/custom-opm-flowdiagnostics-applications)
 
 ################################################################################
 # NRLib
